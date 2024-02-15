@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
 import { NextUIProvider } from "@nextui-org/react";
 import Footer from "@/components/layouts/Footer";
-import { AvatarList } from "@/components/avatar/AvatarList";
+import { AvatarPromptsList } from "@/components/avatar/AvatarPromptsList";
 
 const AuthProvider = dynamic(async () => (await import('@/components/auth/AuthProvider')).AuthProvider, { ssr: false })
 
@@ -16,7 +16,7 @@ export default function Home() {
         <div className="background overflow-y-auto bg-cover bg-center bg-[#00000090] bg-blend-hue overflow-x-hidden">
           <Header />
           <main className="flex min-h-screen flex-col items-center justify-between px-24">
-            <AvatarList />
+            <AvatarPromptsList />
           </main>
         </div>
         <Footer />
