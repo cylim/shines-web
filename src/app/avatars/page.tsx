@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Header from "@/components/layouts/Header";
 import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";

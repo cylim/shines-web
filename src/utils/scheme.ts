@@ -12,3 +12,10 @@ export type Video = {
   id: string
   url: string
 }
+
+export type Prompt = {
+  content: string
+  fid: string
+  address: string
+  avatarPrompted: string
+}

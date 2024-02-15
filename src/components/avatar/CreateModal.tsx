@@ -56,7 +56,7 @@ export const CreateModal = () => {
       const key = `${address}-${+new Date()}`;
 
       toast.dismiss()
-      toast.loading('Uploading image')
+      toast.loading('Uploading image...')
 
       const { downloadUrl } = await uploadFile({
         collection: "resources",
@@ -68,22 +68,25 @@ export const CreateModal = () => {
       toast.loading('Generating avatar...')
 
       const [type] = types
-      let res = undefined
+      let base64Img = undefined
       if (!!prompt) {
-        res = await ShineAPI.avatarWithPrompt({ prompt, file })
+        base64Img = await ShineAPI.avatarWithPrompt({ prompt, file })
       } else {
-        res = await ShineAPI.avatarWithType({ file, type: type || '1' })
+        base64Img = await ShineAPI.avatarWithType({ file, type: type || '1' })
       }
-      const buffer = Buffer.from(res, 'binary')
+      // const buffer = Buffer.from(res, 'binary')
+      // const blob = new Blob([res], { type: 'image/png' });
+      console.log(base64Img)
 
-      const avaFile = new File([buffer], 'ava.png')
-      console.log(avaFile)
+      // const avaFile = new File([blob], 'ava.png')
+      // console.log(avaFile)
 
       toast.dismiss()
       toast.loading('Storing avatar for generative usage...')
+
       const { downloadUrl: url } = await uploadFile({
         collection: "resources",
-        data: avaFile,
+        data: base64Img,
         filename: `${key}-avatar.png`,
       });
 
@@ -102,11 +105,14 @@ export const CreateModal = () => {
         },
       });
 
-      toast.dismiss()
-      toast.success(`Created`)
+      
+      setTimeout(() => {
+        toast.dismiss()
+        toast.success(`Created`)
+        setOpen(false);
 
-      setOpen(false);
-      reload();
+        reload();
+      }, 1000)
     } catch (err: any) {
       toast.dismiss()
       toast.error(err.message)

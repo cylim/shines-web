@@ -31,7 +31,7 @@ export const AvatarItem = ({ item, createdAt, updatedAt }: { item: Avatar, creat
   return <Link as={NextLink} href={`avatars/${item.id}`}>
     <div className="flex flex-col gap-4 border-slate-500 border-1 p-2 rounded-lg">
       <div className="font-semibold text-2xl grow flex flex-row items-start">
-        <Image src={item.avatarUrl} height={240} width={240} />
+        <Image src={item.avatarUrl} height={360} width={240} />
       </div>
 
       <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>

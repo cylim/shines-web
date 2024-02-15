@@ -11,6 +11,8 @@ import { FrameDebugger } from "./components/frame-debugger";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import "./page.module.css";
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Page({
