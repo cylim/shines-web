@@ -11,23 +11,19 @@ import {
 } from "frames.js/next/server";
 import Link from "next/link";
 import { DEBUG_HUB_OPTIONS } from "@/utils/frame";
-import { getDoc, unsafeIdentity } from "@junobuild/core-peer";
+import { getDoc, setDoc } from "@junobuild/core-peer";
 import { HOST, SATELITE_ID } from "@/utils/env";
-import { Avatar } from "@/utils/scheme";
+import { Avatar, Prompt } from "@/utils/scheme";
 
 type State = {
-  active: string;
-  total_button_presses: number;
+  active: boolean;
 };
 
-const initialState = { active: "1", total_button_presses: 0 };
+const initialState = { active: false };
 
 const reducer: FrameReducer<State> = (state, action) => {
   return {
-    total_button_presses: state.total_button_presses + 1,
-    active: action.postBody?.untrustedData.buttonIndex
-      ? String(action.postBody?.untrustedData.buttonIndex)
-      : "1",
+    active: true,
   };
 };
 
@@ -37,14 +33,11 @@ export default async function Home({
   searchParams,
 }: NextServerPageProps) {
   const previousFrame = getPreviousFrame<State>(searchParams);
+  console.log(previousFrame, 'previousFrame')
 
   const frameMessage = await getFrameMessage(previousFrame.postBody, {
     ...DEBUG_HUB_OPTIONS,
   });
-
-  if (frameMessage && !frameMessage?.isValid) {
-    throw new Error("Invalid frame payload");
-  }
 
   const [state, dispatch] = useFramesReducer<State>(
     reducer,
@@ -55,7 +48,8 @@ export default async function Home({
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   // example: load the users credentials & check they have an NFT
   const { id } = (params as any)
-  const item = await getDoc< Avatar >({
+  console.log('id:' , id)
+  const item = await getDoc<Avatar>({
     satellite: {
       identity: undefined,
       satelliteId: SATELITE_ID,
@@ -65,6 +59,7 @@ export default async function Home({
   })
 
   console.log("info: state is:", state);
+  console.log("info: frameMessage is:", frameMessage);
   if (frameMessage) {
     const {
       isValid,
@@ -79,8 +74,26 @@ export default async function Home({
       requesterVerifiedAddresses,
       requesterUserData,
     } = frameMessage;
-
-    console.log("info: frameMessage is:", frameMessage);
+    if (!state.active && isValid && buttonIndex === 1 && !!inputText) {
+      dispatch(1)
+      await setDoc<Prompt>({
+        satellite: {
+          identity: undefined,
+          satelliteId: SATELITE_ID,
+        },
+        collection: "prompts",
+        doc: {
+          key: '',
+          data: {
+            content: inputText,
+            address: requesterVerifiedAddresses?.[0],
+            avatarPrompted: id,
+            fid: requesterFid,
+            userData: requesterUserData
+          }
+        }
+      })
+    }
   }
 
   // then, when done, return next frame
@@ -92,14 +105,19 @@ export default async function Home({
         Debug
       </Link>
       <FrameContainer
-        postUrl="/frames/api"
+        pathname={`/frames/${id}`}
+        postUrl={`/frames/api`}
         state={state}
         previousFrame={previousFrame}
       >
-        <FrameImage src={item?.data?.avatarUrl || ''} />
+        {!state?.active ? <FrameImage src={item?.data?.avatarUrl || ''} /> : <FrameImage>
+          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center">
+            Submitted
+          </div>
+        </FrameImage> }
         <FrameInput text="Enter your prompts" />
-        <FrameButton>
-          {state?.active === "1" ? "Submit" : "Submitted"}
+        <FrameButton action="post">
+          {!state?.active ? "Submit" : "Submitted"}
         </FrameButton>
         <FrameButton action="link" target={`${HOST}/avatars/${id}`}>
           View Prompts

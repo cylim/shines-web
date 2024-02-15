@@ -15,7 +15,8 @@ export type Video = {
 
 export type Prompt = {
   content: string
-  fid: string
+  fid: number
   address: string
   avatarPrompted: string
+  userData: any
 }
