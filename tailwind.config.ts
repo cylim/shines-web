@@ -1,10 +1,13 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
+const {nextui} = require("@nextui-org/react");
 
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -15,6 +18,15 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [nextui(), plugin(function ({ matchUtilities, theme }) {
+    matchUtilities(
+      {
+        'text-shadow': (value) => ({
+          textShadow: value,
+        }),
+      },
+      { values: theme('textShadow') }
+    )
+  })],
 };
 export default config;

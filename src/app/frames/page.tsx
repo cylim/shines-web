@@ -94,25 +94,12 @@ export default async function Home({
             {frameMessage?.inputText ? frameMessage.inputText : "Hello world"}
           </div>
         </FrameImage>
-        <FrameInput text="put some text here" />
+        <FrameInput text="Enter your prompts" />
         <FrameButton>
-          {state?.active === "1" ? "Active" : "Inactive"}
-        </FrameButton>
-        <FrameButton>
-          {state?.active === "2" ? "Active" : "Inactive"}
-        </FrameButton>
-        <FrameButton
-          action="mint"
-          target={getTokenUrl({
-            address: "0x060f3edd18c47f59bd23d063bbeb9aa4a8fec6df",
-            tokenId: "123",
-            chainId: 7777777,
-          })}
-        >
-          Mint
+          {state?.active === "1" ? "Submit" : "Submitted"}
         </FrameButton>
         <FrameButton action="link" target={`https://www.google.com`}>
-          External
+          View Prompts
         </FrameButton>
       </FrameContainer>
     </div>
