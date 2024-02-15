@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <NextUIProvider>
       <AuthProvider>
-        <div className="min-h-screen background overflow-y-auto bg-cover bg-center bg-[#00000090] bg-blend-hue overflow-x-hidden">
+        <div className="background overflow-y-auto bg-cover bg-center bg-[#00000090] bg-blend-hue overflow-x-hidden">
           <Header />
           <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div />

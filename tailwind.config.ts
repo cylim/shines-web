@@ -1,8 +1,9 @@
-import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 const {nextui} = require("@nextui-org/react");
 
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+const config = {
+  important: true,
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,6 +11,14 @@ const config: Config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      'xs': '480px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

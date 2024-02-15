@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   darkTheme,
@@ -13,19 +13,26 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
-import { APP_NAME, WALLETCONNECT_KEY } from '@/utils/env';
+import { APP_NAME, WALLETCONNECT_KEY, SATELITE_ID } from '@/utils/env';
+import { initJuno } from '@junobuild/core-peer';
+import { useEffect } from 'react';
 
 const config = getDefaultConfig({
   appName: APP_NAME,
   projectId: WALLETCONNECT_KEY,
   chains: [base],
-  ssr: false, // If your dApp uses server side rendering (SSR)
+  ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
 const queryClient = new QueryClient();
 
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    (async () =>
+      await initJuno({
+        satelliteId: SATELITE_ID,
+      }))();
+  }, []);
 
   return (
     <WagmiProvider config={config}>

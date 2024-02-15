@@ -10,6 +10,10 @@ const social = [
     name: 'Github',
     url: `https://github.com/cylim/shines-web`,
   },
+  {
+    name: 'DeSoc',
+    url: `https://build.bewater.xyz/en/campaigns/HK6L-DeSoc-Hackathon-S1/projects/`,
+  },
 ] as const satisfies readonly ISocial[]
 
 export const Footer = async () => {
