@@ -7,6 +7,7 @@ import { AvatarItem } from "./AvatarItem";
 import { useAccount } from "wagmi";
 import dynamic from "next/dynamic";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { EmptyComponent } from "../EmptyComponent";
 
 const CreateModal = dynamic(async () => (await import('@/components/avatar/CreateModal')).CreateModal, { ssr: false })
 
@@ -15,10 +16,10 @@ export const AvatarList = () => {
   const [items, setItems] = useState<Doc<Avatar>[]>([]);
 
   useEffect(() => {
-    window.addEventListener("reload", list);
+    window.addEventListener("reloadAvatar", list);
 
     return () => {
-      window.removeEventListener("reload", list);
+      window.removeEventListener("reloadAvatar", list);
     };
   }, []);
 
@@ -34,6 +35,7 @@ export const AvatarList = () => {
         },
       },
     });
+    console.log(items)
 
     setItems(items.filter(v => v.data.address === address));
   };
@@ -52,20 +54,12 @@ export const AvatarList = () => {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto shadow-lg mt-8">
-      <header className="px-5 py-4 border-b border-gray-100">
-        <h2 className="font-semibold text-gray-800 text-4xl">Resolution</h2>
-      </header>
+    <div className="w-full mx-auto shadow-lg mt-8 flex flex-col items-center">
       <div className="py-3">
-        <div className="overflow-x-auto">
-          {!items.length ? <div className="py-8">
-            <h1 className="text-9xl py-4">🧗‍♂️</h1>
-            <span className="text-xl text-stone-900">Create a challenge, step out of comfort zone!</span>
-          </div> : null}
-          <div className="max-h-[320px] overflow-y-auto">
+            {!items.length ? <EmptyComponent/> : null}
+          <div className=" flex flex-row flex-wrap items-center justify-start gap-4">
             {items.map(renderAvatarItem)}
           </div>
-        </div>
       </div>
       {!isConnected ? <div className="flex flex-col items-center"><ConnectButton /></div> : <CreateModal />}
 
