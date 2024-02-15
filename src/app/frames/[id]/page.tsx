@@ -33,8 +33,6 @@ export default async function Home({
   searchParams,
 }: NextServerPageProps) {
   const previousFrame = getPreviousFrame<State>(searchParams);
-  console.log(previousFrame, 'previousFrame')
-
   const frameMessage = await getFrameMessage(previousFrame.postBody, {
     ...DEBUG_HUB_OPTIONS,
   });
@@ -46,9 +44,7 @@ export default async function Home({
   );
 
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
-  // example: load the users credentials & check they have an NFT
   const { id } = (params as any)
-  console.log('id:' , id)
   const item = await getDoc<Avatar>({
     satellite: {
       identity: undefined,
@@ -59,8 +55,8 @@ export default async function Home({
   })
 
   console.log("info: state is:", state);
-  console.log("info: frameMessage is:", frameMessage);
   if (frameMessage) {
+    console.log("info: frameMessage is:", frameMessage);
     const {
       isValid,
       buttonIndex,
@@ -74,8 +70,7 @@ export default async function Home({
       requesterVerifiedAddresses,
       requesterUserData,
     } = frameMessage;
-    if (!state.active && isValid && buttonIndex === 1 && !!inputText) {
-      dispatch(1)
+    if (state.active && isValid && buttonIndex === 1 && !!inputText) {
       await setDoc<Prompt>({
         satellite: {
           identity: undefined,
@@ -83,7 +78,7 @@ export default async function Home({
         },
         collection: "prompts",
         doc: {
-          key: '',
+          key: `${requesterVerifiedAddresses}?.[0]-${+new Date()}`,
           data: {
             content: inputText,
             address: requesterVerifiedAddresses?.[0],

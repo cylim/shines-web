@@ -8,6 +8,7 @@ import {
 import { WagmiProvider } from 'wagmi';
 import {
   base,
+  baseSepolia
 } from 'wagmi/chains';
 import {
   QueryClientProvider,
@@ -20,7 +21,7 @@ import { useEffect } from 'react';
 const config = getDefaultConfig({
   appName: APP_NAME,
   projectId: WALLETCONNECT_KEY,
-  chains: [base],
+  chains: [base, baseSepolia],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
