@@ -17,6 +17,7 @@ export type Avatar = {
 export type Video = {
   address: string
   url: string
+  type?: string
 } & DatabaseRow
 
 export type Prompt = {

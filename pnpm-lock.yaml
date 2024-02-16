@@ -34,6 +34,9 @@ dependencies:
   frames.js:
     specifier: ^0.5.0
     version: 0.5.0(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+  gsap:
+    specifier: ^3.12.5
+    version: 3.12.5
   next:
     specifier: 14.1.0
     version: 14.1.0(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
@@ -55,6 +58,9 @@ dependencies:
   satori:
     specifier: ^0.10.13
     version: 0.10.13
+  scrolltrigger:
+    specifier: ^1.0.1
+    version: 1.0.1
   sharp:
     specifier: ^0.33.1
     version: 0.33.2
@@ -7816,6 +7822,10 @@ packages:
       object-keys: 1.1.1
     dev: true
 
+  /defined@1.0.1:
+    resolution: {integrity: sha512-hsBd2qSVCRE+5PmNdHt1uzyrFu5d3RwmFDKzyNZMFq/EwDNJF7Ee5+D5oEKF0hU6LhtoUF1macFvOe4AskQC1Q==}
+    dev: false
+
   /defu@6.1.4:
     resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
     dev: false
@@ -9063,6 +9073,10 @@ packages:
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
+
+  /gsap@3.12.5:
+    resolution: {integrity: sha512-srBfnk4n+Oe/ZnMIOXt3gT605BX9x5+rh/prT2F1SsNJsU1XuMiP0E2aptW481OnonOGACZWBqseH5Z7csHxhQ==}
+    dev: false
 
   /h3@1.10.1:
     resolution: {integrity: sha512-UBAUp47hmm4BB5/njB4LrEa9gpuvZj4/Qf/ynSMzO6Ku2RXaouxEfiG2E2IFnv6fxbhAkzjasDxmo6DFdEeXRg==}
@@ -11947,6 +11961,13 @@ packages:
     resolution: {integrity: sha512-t44QCeDKAPf1mtQH3fYpWz8IM/DyvHLjs8wUvvwMYxk5moOqCzrMSxK6HQVD0QVmVjXFavoFIPRVrMuJPKAvtg==}
     dependencies:
       compute-scroll-into-view: 3.1.0
+    dev: false
+
+  /scrolltrigger@1.0.1:
+    resolution: {integrity: sha512-s1DiltnlovjFtapWHKOgHsJEM4lKF52v7rClIqROh6btosGO/Pc0mFiRZz+PTXjAp2PZPpj0U0KPcmxTnN4Idw==}
+    dependencies:
+      defined: 1.0.1
+      xtend: 4.0.2
     dev: false
 
   /secp256k1@5.0.0:
