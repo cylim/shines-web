@@ -106,7 +106,7 @@ export const CreateModal = () => {
               <input {...getInputProps()} />
               {selectedImage ? (
                 <Image src={selectedImage} alt="Selected" className="max-w-full rounded-md" />
-              ) : <p className="text-white">Drag 'n' drop an image here, or click to select one</p>}
+              ) : <p className="text-white">Drag n drop an image here, or click to select one</p>}
             </div>
             <Textarea variant={'faded'} label="Prompt" isRequired placeholder="Enter your prompt for generating image" value={description} minRows={5} onValueChange={setDescription} />
           </div>
