@@ -93,3 +93,12 @@ p.terms-conditions {
   line-height: 15px;
   color: white;
 }
+
+.box-wrapper {
+  border-radius: 20px;
+  padding: 35px 40px;
+  margin: 0 0 40px;
+  background: rgba(255, 255, 255, 0.8);  /* Change color and transparency as needed */
+  backdrop-filter: blur(15px);
+  box-shadow: 1px 1px 20px rgba(0,0,0,0.19);
+}

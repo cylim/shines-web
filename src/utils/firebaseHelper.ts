@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
@@ -9,7 +8,7 @@ import {
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes, uploadString } from "firebase/storage";
 import { firestore, storage } from "./firebase";
 
 export const insertRow = async (table: string, paths: string[], data: any) => {
@@ -20,16 +19,16 @@ export const insertRow = async (table: string, paths: string[], data: any) => {
    }, {merge: true});
 }
 
-export const upload = async (id: string, data: any) => {
-  const imageRef = ref(storage, `resources/${id}/image`);
-  await uploadString(imageRef, data, "data_url")
+export const upload = async (id: string, data: File) => {
+  const imageRef = ref(storage, `resources/${id}`);
+  await uploadBytes(imageRef, data)
   return getDownloadURL(imageRef)
 }
 
 export const list = async (table: string, sort: 'asc' | 'desc' = 'desc') => {
   const q = query(
     collection(firestore, table),
-    // orderBy("timestamp", sort)
+    orderBy("timestamp", sort)
   )
   const colSnap = await getDocs(q);
   const t: any[] = []

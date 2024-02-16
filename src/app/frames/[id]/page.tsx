@@ -71,7 +71,8 @@ export default async function Home({
         address: requesterVerifiedAddresses?.[0],
         avatarPrompted: id,
         fid: requesterFid,
-        userData: requesterUserData
+        userData: requesterUserData,
+        ...requesterUserData
       })
     }
   }

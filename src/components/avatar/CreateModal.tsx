@@ -1,30 +1,42 @@
 'use client'
 import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Textarea } from "@nextui-org/react"
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useCallback, useState } from "react"
 import { Input } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
-import { Avatar } from "@/utils/scheme";
 import { insertRow, upload } from "@/utils/firebaseHelper";
-
+import { useDropzone } from 'react-dropzone';
 
 export const CreateModal = () => {
   const [opened, setOpen] = useState(false)
-  const [file, setFile] = useState<File | undefined>();
+  const [file, setFile] = useState<File | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [description, setDescription] = useState("")
   const { address } = useAccount();
+  const [selectedImage, setSelectedImage] = useState<any>(null);
+
+  const onDrop = useCallback((acceptedFiles: any) => {
+    const image = acceptedFiles[0];
+    setFile(image)
+    const reader = new FileReader();
+    reader.onload = () => {
+      setSelectedImage(reader?.result);
+    };
+    reader.readAsDataURL(image);
+  }, []);
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': []
+    },
+    multiple: false,
+  });
 
   const reload = () => {
     let event = new Event("reloadAvatar");
     window.dispatchEvent(event);
   };
-
-  const handleUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-    setFile(() => (event.target as HTMLInputElement).files?.[0] || undefined) 
-  }
 
   const add = async () => {
     setLoading(true);
@@ -34,40 +46,16 @@ export const CreateModal = () => {
         throw new Error('No user or provider')
       }
       if (!file) {
-        throw new Error('No file')
+        throw new Error('No image selected')
       }
-
-      const key = `${address}-${+new Date()}`;
-
+      
       toast.dismiss()
       toast.loading('Uploading image...')
-
-      // const { downloadUrl } = await uploadFile({
-      //   collection: "resources",
-      //   data: file,
-      //   filename: `${key}-ori`,
-      // });
-
+      const key = `${address}-${+new Date()}`;
       const url = await upload(`${key}-ori`, file)
-
-      // toast.dismiss()
-      // toast.loading('Generating avatar...')
-
-      // let base64Img = undefined
-      // if (!!prompt) {
-      //   base64Img = await ShineAPI.avatarWithPrompt({ prompt, file })
-      // } else {
-      //   base64Img = await ShineAPI.avatarWithType({ file, type: type || '1' })
-      // }
 
       toast.dismiss()
       toast.loading('Storing avatar for generative usage...')
-
-      // const { downloadUrl: url } = await uploadFile({
-      //   collection: "resources",
-      //   data: base64Img,
-      //   filename: `${key}-avatar.png`,
-      // });
 
       await insertRow('avatars', [key], {
         id: key,
@@ -75,7 +63,7 @@ export const CreateModal = () => {
         sourceUrl: url,
         description: description,
       })
-      
+
       setTimeout(() => {
         toast.dismiss()
         toast.success(`Created`)
@@ -114,19 +102,13 @@ export const CreateModal = () => {
         </ModalHeader>
         <ModalBody>
           <div className="py-16 flex flex-col gap-4 items-center">
-            {!!file ? <Image src={URL.createObjectURL(file)} height={320} width={'auto'} /> : <div>
-              </div>}
-            <Input
-              variant={'faded'}
-              key={`${address}-input`}
-              id={`${address}-input`}
-              name={`${address}-input`}
-              type="file"
-              hidden
-              onChange={handleUpload}
-              accept="image/*"
-            />
-            <Textarea variant={'faded'} label="Prompt" placeholder="Enter your prompt for generating image" value={description} onValueChange={setDescription} />
+            <div {...getRootProps()} className="flex max-w-full dropzone text-center border-dashed border-2 border-gray-600 p-8 rounded-md">
+              <input {...getInputProps()} />
+              {selectedImage ? (
+                <Image src={selectedImage} alt="Selected" className="max-w-full rounded-md" />
+              ) : <p className="text-white">Drag 'n' drop an image here, or click to select one</p>}
+            </div>
+            <Textarea variant={'faded'} label="Prompt" isRequired placeholder="Enter your prompt for generating image" value={description} minRows={5} onValueChange={setDescription} />
           </div>
           <div className="modal-terms">
             <Button radius="full" onClick={add} isLoading={loading} color="primary" className="primary-button">

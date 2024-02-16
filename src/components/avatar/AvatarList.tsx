@@ -5,7 +5,6 @@ import { Avatar } from "@/utils/scheme";
 import { AvatarItem } from "./AvatarItem";
 import { useAccount } from "wagmi";
 import dynamic from "next/dynamic";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { EmptyComponent } from "../EmptyComponent";
 import { list as listDoc } from "@/utils/firebaseHelper";
 
@@ -53,7 +52,7 @@ export const AvatarList = () => {
             {items.map(renderAvatarItem)}
           </div>
       </div>
-      {!isConnected ? <div className="flex flex-col items-center"><ConnectButton /></div> : <CreateModal />}
+      {!isConnected ? null : <CreateModal />}
 
     </div>
   );

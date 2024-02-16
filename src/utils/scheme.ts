@@ -1,5 +1,7 @@
 type DatabaseRow = {
-  timestamp: string
+  timestamp: {
+    seconds: number
+  }
   id: string
 }
 
@@ -20,6 +22,7 @@ export type Video = {
 export type Prompt = {
   content: string
   fid: number
+  generatedImageURL?: string
   address: string
   avatarPrompted: string
   displayName?: string

@@ -26,7 +26,7 @@ const handleImage = (response: AxiosResponse) => {
       // Create a File object from the Blob
       const file = new File([blob], 'uploaded_image.png', { type: (response?.headers?.['Content-Type'] as string)?.toLowerCase() || 'image/png' });
 
-    return file;
+      return file;
   }
 
 export const ShineAPI = {
