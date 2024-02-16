@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 import NextLink from 'next/link'
 
-export const AvatarItem = ({ item, createdAt, updatedAt }: { item: Avatar, createdAt: bigint | undefined, updatedAt: bigint | undefined }) => {
+export const AvatarItem = ({ item }: { item: Avatar}) => {
   const router = useRouter()
 
   const getFrame = async (e: MouseEvent) => {
@@ -29,14 +29,15 @@ export const AvatarItem = ({ item, createdAt, updatedAt }: { item: Avatar, creat
   }
 
   return <Link as={NextLink} href={`avatars/${item.id}`}>
-    <div className="flex flex-col gap-4 border-slate-500 border-1 p-2 rounded-lg">
+    <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
       <div className="font-semibold text-2xl grow flex flex-row items-start">
-        <Image src={item.avatarUrl} height={360} width={240} />
+        <Image src={item.sourceUrl} height={240} width={240} className={'max-h-[240px] max-w-[240px]'} />
       </div>
 
       <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
-        <Button radius="full" onClick={createVideo} color={'primary'} className="w-[220px]">Create</Button>
-        <Button radius="full" onClick={getFrame} color={'secondary'} className="w-[220px]">Frame</Button>
+        {/* <Button radius="full" onClick={createVideo} color={'primary'} className="w-[220px]">Create</Button> */}
+        <Button radius="full"  color={'primary'} className="w-[234px]">View Prompts</Button>
+        <Button radius="full" onClick={getFrame} color={'secondary'} className="w-[234px]">Frame</Button>
       </div>
     </div>
 

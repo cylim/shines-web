@@ -11,9 +11,8 @@ import {
 } from "frames.js/next/server";
 import Link from "next/link";
 import { DEBUG_HUB_OPTIONS } from "@/utils/frame";
-import { getDoc, setDoc } from "@junobuild/core-peer";
-import { HOST, SATELITE_ID } from "@/utils/env";
-import { Avatar, Prompt } from "@/utils/scheme";
+import { HOST } from "@/utils/env";
+import { get, insertRow } from "@/utils/firebaseHelper";
 
 type State = {
   active: boolean;
@@ -45,14 +44,8 @@ export default async function Home({
 
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   const { id } = (params as any)
-  const item = await getDoc<Avatar>({
-    satellite: {
-      identity: undefined,
-      satelliteId: SATELITE_ID,
-    },
-    collection: "avatars",
-    key: id
-  })
+  const item = await get('avatars', [id as string])
+  console.log(item)
 
   console.log("info: state is:", state);
   if (frameMessage) {
@@ -71,22 +64,14 @@ export default async function Home({
       requesterUserData,
     } = frameMessage;
     if (state.active && isValid && buttonIndex === 1 && !!inputText) {
-      await setDoc<Prompt>({
-        satellite: {
-          identity: undefined,
-          satelliteId: SATELITE_ID,
-        },
-        collection: "prompts",
-        doc: {
-          key: `${requesterVerifiedAddresses}?.[0]-${+new Date()}`,
-          data: {
-            content: inputText,
-            address: requesterVerifiedAddresses?.[0],
-            avatarPrompted: id,
-            fid: requesterFid,
-            userData: requesterUserData
-          }
-        }
+      const key = `${requesterVerifiedAddresses?.[0] || 'undefined'}-${+new Date()}`
+      await insertRow('prompts', [key], {
+        id: key,
+        content: inputText,
+        address: requesterVerifiedAddresses?.[0],
+        avatarPrompted: id,
+        fid: requesterFid,
+        userData: requesterUserData
       })
     }
   }
@@ -105,13 +90,17 @@ export default async function Home({
         state={state}
         previousFrame={previousFrame}
       >
-        {!state?.active ? <FrameImage src={item?.data?.avatarUrl || ''} /> : <FrameImage>
-          <div tw="w-full h-full bg-slate-700 text-white justify-center items-center">
-            Submitted
+        <FrameImage aspectRatio="1:1">
+          <div tw={`h-full w-full flex flex-col items-end justify-end bg-black bg-cover bg-center`} 
+            style={{ backgroundImage: `url('${item?.sourceUrl || 'https://wrbih-aiaaa-aaaal-adofa-cai.icp0.io/resources/0x950911F03616a05d5A1F96E76F783fAdeb53778c-1707986926701-avatar.png'}')`, backgroundPosition: 'center', backgroundRepeat: 'repeat', backgroundSize: 'cover' }}
+          >
+            <div tw="bg-white w-full color-black px-4 py-2 text-5xl" >
+              {!state?.active ? item?.description || 'Help me to generate new prompt! Tips might given to the best prompt!' : 'Thanks for submitting the prompt!'}
+            </div>
           </div>
-        </FrameImage> }
+        </FrameImage>
         <FrameInput text="Enter your prompts" />
-        <FrameButton action="post">
+        <FrameButton action={"post"}>
           {!state?.active ? "Submit" : "Submitted"}
         </FrameButton>
         <FrameButton action="link" target={`${HOST}/avatars/${id}`}>

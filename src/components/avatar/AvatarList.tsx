@@ -1,19 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Doc, listDocs } from "@junobuild/core-peer";
 import { Avatar } from "@/utils/scheme";
 import { AvatarItem } from "./AvatarItem";
 import { useAccount } from "wagmi";
 import dynamic from "next/dynamic";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { EmptyComponent } from "../EmptyComponent";
+import { list as listDoc } from "@/utils/firebaseHelper";
 
 const CreateModal = dynamic(async () => (await import('@/components/avatar/CreateModal')).CreateModal, { ssr: false })
 
 export const AvatarList = () => {
   const { address, isConnected } = useAccount()
-  const [items, setItems] = useState<Doc<Avatar>[]>([]);
+  const [items, setItems] = useState<Avatar[]>([]);
 
   useEffect(() => {
     window.addEventListener("reloadAvatar", list);
@@ -26,18 +26,10 @@ export const AvatarList = () => {
   const list = async () => {
     if (!address) return
 
-    const { items } = await listDocs<Avatar>({
-      collection: "avatars",
-      filter: {
-        order: {
-          desc: true,
-          field: 'created_at'
-        },
-      },
-    });
+    const items = await listDoc("avatars") as Avatar[]
     console.log(items)
 
-    setItems(items.filter(v => v.data.address === address));
+    setItems(items.filter(v => v.address === address));
   };
 
   useEffect(() => {
@@ -49,8 +41,8 @@ export const AvatarList = () => {
     (async () => await list())();
   }, [address]);
 
-  const renderAvatarItem = ({ key, data, created_at, updated_at }: Doc<Avatar>) => {
-    return <AvatarItem key={key} item={data} createdAt={created_at} updatedAt={updated_at} />
+  const renderAvatarItem = (item: Avatar) => {
+    return <AvatarItem key={item.id} item={item} />
   }
 
   return (

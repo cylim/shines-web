@@ -1,41 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Doc, listDocs } from "@junobuild/core-peer";
 import { Prompt } from "@/utils/scheme";
 import { AvatarPromptItem } from "./AvatarPromptItem";
 import { useAccount } from "wagmi";
 import { EmptyComponent } from "../EmptyComponent";
 import { useParams } from "next/navigation";
+import { list as listDoc } from "@/utils/firebaseHelper";
 
 export const AvatarPromptsList = () => {
   const { address } = useAccount()
   const params = useParams()
-  const [items, setItems] = useState<Doc<Prompt>[]>([]);
+  const [items, setItems] = useState<Prompt[]>([]);
 
-  useEffect(() => {
-    window.addEventListener("reloadAvatar", list);
-
-    return () => {
-      window.removeEventListener("reloadAvatar", list);
-    };
-  }, []);
 
   const list = async () => {
     if (!address) return
 
-    const { items } = await listDocs<Prompt>({
-      collection: "prompts",
-      filter: {
-        order: {
-          desc: true,
-          field: 'created_at'
-        },
-      },
-    });
+    const items = await listDoc('prompts') as Prompt[]
     console.log(items)
 
-    setItems(items.filter(v => v.data.avatarPrompted === params?.id));
+    setItems(items.filter(v => v.avatarPrompted === params?.id));
   };
 
   useEffect(() => {
@@ -47,8 +32,8 @@ export const AvatarPromptsList = () => {
     (async () => await list())();
   }, [address]);
 
-  const renderAvatarItem = ({ key, data, created_at, updated_at }: Doc<Prompt>) => {
-    return <AvatarPromptItem key={key} item={data} createdAt={created_at} updatedAt={updated_at} />
+  const renderAvatarItem = (item: Prompt) => {
+    return <AvatarPromptItem key={item.id} item={item} timestamp={item.timestamp}/>
   }
 
   return (
