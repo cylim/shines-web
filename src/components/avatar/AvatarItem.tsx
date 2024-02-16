@@ -31,7 +31,7 @@ export const AvatarItem = ({ item }: { item: Avatar}) => {
   return <Link as={NextLink} href={`avatars/${item.id}`}>
     <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
       <div className="font-semibold text-2xl grow flex flex-row items-start">
-        <Image src={item.sourceUrl} height={180} width={180} className={'max-h-[180px] max-w-[180px] min-h-[180px] min-w-[180px]'} />
+        <Image src={item.sourceUrl} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />
       </div>
 
       <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>

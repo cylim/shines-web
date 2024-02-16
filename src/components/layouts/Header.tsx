@@ -4,6 +4,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { usePathname, useRouter } from 'next/navigation';
 import { useBreakpoint } from '@/utils/useBreakpoints';
+import { Link } from '@nextui-org/react';
+import NextLink from 'next/link';
 
 enum TabsEnum {
   Avatar = 'avatars',
@@ -33,8 +35,9 @@ export const Header = async () => {
     </div>
   }
 
-  return <header className={'py-4 flex flex-col gap-2 px-2 lg:px-4'}>
+  return <header className={'pb-2 flex flex-col gap-2 px-2 lg:px-4'}>
     <div className={'flex flex-row items-center justify-between w-full'}>
+      <Link as={NextLink} href={'/'}>
         <Image
           src="/shine.png"
           alt="Shine Logo"
@@ -43,6 +46,7 @@ export const Header = async () => {
           height={48}
           priority
         />
+      </Link>
       {isConnected ? renderMenu() : null}
         <ConnectButton showBalance={!isBelowSm} accountStatus={isBelowSm ? 'avatar' :"full"} />
     </div>

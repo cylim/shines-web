@@ -12,7 +12,7 @@ const social = [
   },
   {
     name: 'DeSoc',
-    url: `https://build.bewater.xyz/en/campaigns/HK6L-DeSoc-Hackathon-S1/projects/`,
+    url: `https://build.bewater.xyz/en/campaigns/HK6L-DeSoc-Hackathon-S1/projects/475`,
   },
 ] as const satisfies readonly ISocial[]
 

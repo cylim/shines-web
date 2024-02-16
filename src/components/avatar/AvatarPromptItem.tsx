@@ -52,7 +52,7 @@ export const AvatarPromptItem = ({ item, file }: { item: Prompt, file: File | un
         </div>
       </div>
       <div className={'flex flex-col flex-wrap justify-center gap-2 items-center w-[100%] py-4'}>
-        {!!image ? <Image src={image} height={240} width={240} /> : 
+        {!!image ? <Image src={image} height={180} width={180} /> : 
           <CircularProgress size="lg" aria-label="Loading..." label="Generating avatar..." />
          }
       </div>
