@@ -14,9 +14,11 @@ const Step4: React.FC = () => {
   const [uploadingAudio, setUploadingAudio] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [finishGenerate, setFinishGenerate] = useState<boolean>(false);
-  const [saveAudioFile, setSaveAudioFile] = useState<File | null>(null);
+  const [saveAudioFile, setSaveAudioFile] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState<string>('female');
   const router = useRouter();
+  const [content, setContent] = useState('This is a placeholder audio for testing purposes.')
+  const [gender, setGender] = useState(1)
 
   useEffect(() => {
     // Add any side effects or initialization here if needed
@@ -40,27 +42,9 @@ const Step4: React.FC = () => {
     setLoading(true);
     setFinishGenerate(true)
     try {
-        const response = await fetch('/generate_audio/', {
-            method: 'POST',
-            body: JSON.stringify({ content: "aaa", gender: "1" }),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
+        const url = await ShineAPI.generateAudio({content, gender})
 
-        if (!response.ok) {
-            throw new Error('Failed to generate audio');
-        }
-
-        const contentDisposition = response.headers.get('Content-Disposition');
-        const fileNameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
-        const fileName = fileNameMatch ? fileNameMatch[1] : 'generated_audio.mp3';
-
-        const audioBlob = await response.blob();
-
-        const audioURL = URL.createObjectURL(audioBlob);
-
-        setSaveAudioFile(audioURL as any);
+      setSaveAudioFile(url);
     } catch (error) {
         console.error('Error generating audio:', error);
         setFinishGenerate(true)
@@ -160,6 +144,10 @@ const Step4: React.FC = () => {
                         Your browser does not support the audio element.
                     </audio>
                 )} */}
+                    {!!saveAudioFile && <audio controls>
+                      <source src={saveAudioFile} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>}
                   <p className="text-gray-400 mb-8">Finish generated</p>
                   <button
                       className="bg-blue-600 text-white font-semibold py-2 px-6 rounded mt-2 ml-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"

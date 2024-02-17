@@ -9,6 +9,11 @@ const shineReq = (payload: any) => {
   })
 }
 
+const handleAudio = (res: AxiosResponse) => {
+  const blob = new Blob([res.data], { type: "audio/mpeg" });
+  return URL.createObjectURL(blob)
+}
+
 const handleImage = (response: AxiosResponse) => {
     let image = btoa(
       new Uint8Array(response.data)
@@ -52,7 +57,7 @@ export const ShineAPI = {
   uploadAvatar: ({username, file}: any) => shineReq({
     data: {file},
     method: "POST",
-    endpoint: `upload-avatar?username=${username}`,
+    endpoint: `upload_avatar?username=${username}`,
     contentType: 'multipart/form-data'
   }),
   uploadAudio: ({username, file}: any) => shineReq({
@@ -62,11 +67,11 @@ export const ShineAPI = {
     contentType: 'multipart/form-data'
   }),
   generateAudio: ({content, gender = 1}: any) => shineReq({
-    data: {content, gender},
     method: "POST",
-    endpoint: `generate-audio`,
-  }),
+    endpoint: `generate_audio/?content=${content}&gender=${gender}`,
+    responseType: 'arraybuffer',
+  }).then(handleAudio),
   generateAiAvatarVideo: ({username}: any) => shineReq({
-    endpoint: `generate-ai-avatar-video?username=${username}`,
+    endpoint: `generate_ai_avatar_video?username=${username}`,
   }),
 }
