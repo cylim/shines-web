@@ -1,14 +1,50 @@
 "use client"
 import React, { useState } from 'react';
-import Step3 from '../Step3';
+import { useRouter } from 'next/navigation';
+import { ShineAPI } from '../utils/shine';
+
+const sleep = (milliseconds: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+};
 
 const Step2: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [userInput, setUserInput] = useState<string>('');
-  const [currentStep, setCurrentStep] = useState(2);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [generatedImage, setGeneratedImage] = useState<string>('');
+  const [Generated, setGenerated] = useState<boolean>(false);
+  const router = useRouter();
 
-  const handleStartClick = () => {
-    setCurrentStep(3);
+  const handleStartClick = async () => {
+    try {
+      setLoading(true);
+      
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+  
+      ShineAPI.avatarWithType({ type: '1', file: selectedFile})
+        .then((result: File) => {
+          console.log(result);
+          setGeneratedImage(URL.createObjectURL(result));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      await sleep(2000);
+
+
+      setGenerated(true)
+    
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+    } finally {
+      setLoading(false); 
+    }
+  };
+  
+  const ToNextPage = async () => {
+    router.push('/step3');
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,34 +87,56 @@ const Step2: React.FC = () => {
           <div className="w-3/4 flex flex-col items-center">
             <h3 className="text-6xl font-bold mb-8">Please upload your photo</h3>
             <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-600 rounded-lg">
-              {selectedFile ? (
+            {selectedFile ? (
                 <div className="mt-4">
-                  <p>Image Preview:</p>
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Selected"
-                    className="rounded-lg"
-                    style={{ maxWidth: '100%', maxHeight: '200px' }}
-                  />
-                  <br />
-                  <label htmlFor="user-input" className="text-white mt-4 mb-2">
-                    What do you want to be?
-                  </label>
-                  <br />
-                  <input
-                    type="text"
-                    id="user-input"
-                    className="bg-gray-700 text-white px-4 py-2 rounded"
-                    value={userInput}
-                    onChange={handleInputChange}
-                  />
-                  <br />
-                  {currentStep === 2 && (
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4" onClick={handleStartClick}>
-                        Upload your photo
-                    </button>
-                    )}
-                    {currentStep === 3 && <Step3 />}
+                  {loading ? (
+                    <div className="animate-spin h-5 w-5 border-t-2 border-b-2 border-blue-500 mx-auto my-4"></div>
+                  ) : (
+                    <div>
+                      {Generated ? (
+                        <div>
+                          <p>Generated Image Preview:</p>
+                          <img
+                            src={generatedImage}
+                            alt="Generated"
+                            className="rounded-lg"
+                            style={{ maxWidth: '100%', maxHeight: '200px' }}
+                          />
+                          <br />
+                          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4" onClick={ToNextPage}>
+                            Next Step
+                          </button>
+                        </div>
+                        
+                      ) : (
+                        <div>
+                          <p>Selected Image Preview:</p>
+                          <img
+                            src={URL.createObjectURL(selectedFile)}
+                            alt="Selected"
+                            className="rounded-lg"
+                            style={{ maxWidth: '100%', maxHeight: '200px' }}
+                          />
+                          <br />
+                          <label htmlFor="user-input" className="text-white mt-4 mb-2">
+                            What do you want to be?
+                          </label>
+                          <br />
+                          <input
+                            type="text"
+                            id="user-input"
+                            className="bg-gray-700 text-white px-4 py-2 rounded"
+                            value={userInput}
+                            onChange={handleInputChange}
+                          />
+                          <br />
+                          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4" onClick={handleStartClick}>
+                            Upload your photo
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div>

@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const App: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(1);
   const router = useRouter();
 
-  
   const handleStartClick = () => {
     router.push('/step2');
   };
@@ -38,12 +36,9 @@ const App: React.FC = () => {
           </div>
           <div className="w-3/4 flex flex-col items-center">
             <h1 className="text-6xl font-bold mb-8">AI Avatar Video Generator</h1>
-            {currentStep === 1 && (
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={handleStartClick}>
                 Start
               </button>
-            )}
-            {currentStep === 2 && <Step2 />}
           </div>
         </div>
       </body>
