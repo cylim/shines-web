@@ -1,15 +1,12 @@
-
 "use client";
-
-import VideoScrollList from "@/components/home/VideoScrollList";
+import { AvatarList } from "@/components/avatar/AvatarList";
 import AppLayout from "@/components/layouts/AppLayout";
 
 
 export default function Home() {
   return (
     <AppLayout>
-        <VideoScrollList />
+      <AvatarList />
     </AppLayout>
   );
-};
-
+}
