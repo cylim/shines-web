@@ -9,8 +9,8 @@ const shineReq = (payload: any) => {
   })
 }
 
-const handleAudio = (res: AxiosResponse) => {
-  const blob = new Blob([res.data], { type: "audio/mpeg" });
+const handleMedia = (res: AxiosResponse) => {
+  const blob = new Blob([res.data], { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() });
   return URL.createObjectURL(blob)
 }
 
@@ -66,12 +66,13 @@ export const ShineAPI = {
     endpoint: `upload-audio?username=${username}`,
     contentType: 'multipart/form-data'
   }),
-  generateAudio: ({content, gender = 1}: any) => shineReq({
+  generateAudio: ({content, gender = "1"}: any) => shineReq({
+    data: {content, gender},
     method: "POST",
-    endpoint: `generate_audio/?content=${content}&gender=${gender}`,
+    endpoint: `generate_audio`,
     responseType: 'arraybuffer',
-  }).then(handleAudio),
+  }).then(handleMedia),
   generateAiAvatarVideo: ({username}: any) => shineReq({
     endpoint: `generate_ai_avatar_video?username=${username}`,
-  }),
+  }).then(handleMedia),
 }

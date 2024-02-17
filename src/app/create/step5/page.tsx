@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layouts/AppLayout';
+import { ShineAPI } from '@/utils/apis/shine';
 
 
 const sleep = (milliseconds: number): Promise<void> => {
@@ -12,6 +13,7 @@ const Step5: React.FC = () => {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string>("");
     const [finishGenerate, setFinishGenerated] = useState<boolean>(false);
   
     const sleep = (milliseconds: number): Promise<void> => {
@@ -29,7 +31,8 @@ const Step5: React.FC = () => {
     const handleStartGenerated = async () => {
     // need to load video code
       setLoading(true);
-      await sleep(3000);  
+      const url = await ShineAPI.generateAiAvatarVideo({username: 'test'})
+      setVideoUrl(url)
       setLoading(false);
       setFinishGenerated(true);
     };
@@ -50,6 +53,7 @@ const Step5: React.FC = () => {
             </div>
             <div className="w-3/4 flex flex-col items-center">
               <h1 className="text-6xl font-bold mb-8">Here is your AI avatar video</h1>
+              {!!videoUrl && <video src={videoUrl} />}
               {!loading && finishGenerate ? (
                 <div className="flex justify-center gap-4">
                   <button

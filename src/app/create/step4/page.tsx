@@ -18,7 +18,7 @@ const Step4: React.FC = () => {
   const [selectedGender, setSelectedGender] = useState<string>('female');
   const router = useRouter();
   const [content, setContent] = useState('This is a placeholder audio for testing purposes.')
-  const [gender, setGender] = useState(1)
+  const [gender, setGender] = useState("1")
 
   useEffect(() => {
     // Add any side effects or initialization here if needed
