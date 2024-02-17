@@ -102,3 +102,13 @@ p.terms-conditions {
   backdrop-filter: blur(15px);
   box-shadow: 1px 1px 20px rgba(0,0,0,0.19);
 }
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+.logo {
+  width: 70px;  
+  height: 70px;  
+  margin-bottom: 0px; 
+  margin-left: 0px;
+}
