@@ -22,7 +22,7 @@ const Step2: React.FC = () => {
       const formData = new FormData();
       formData.append('file', selectedFile);
   
-      ShineAPI.avatarWithType({ type: '1', file: selectedFile})
+      await ShineAPI.avatarWithType({ type: '1', file: selectedFile})
         .then((result: File) => {
           console.log(result);
           setGeneratedImage(URL.createObjectURL(result));
