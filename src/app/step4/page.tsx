@@ -8,13 +8,14 @@ const sleep = (milliseconds: number): Promise<void> => {
 };
 
 const Step4: React.FC = () => {
-  const [text, setText] = useState<string>('');
-  const [resultText, setResultText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [generateAudio, setGenerateAudio] = useState<boolean>(false);
   const [uploadingAudio, setUploadingAudio] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedGender, setSelectedGender] = useState<string>('');
+  const [finishGenerate, setFinishGenerate] = useState<boolean>(false);
+  const [saveAudioFile, setSaveAudioFile] = useState<File | null>(null);
+  const [selectedGender, setSelectedGender] = useState<string>('female');
+  const router = useRouter();
 
   useEffect(() => {
     // Add any side effects or initialization here if needed
@@ -33,42 +34,44 @@ const Step4: React.FC = () => {
     setGenerateAudio(true);
   };
 
+  // still have problem
   const handleStartGenerating = async () => {
-     setLoading(true);
-        
-     await sleep(2000)
-     try {
-         
-         await ShineAPI.summarize({ content: text, language: "en" })
-         .then((response) => {
+    setLoading(true);
+    setFinishGenerate(true)
+    try {
+        const response = await fetch('/generate_audio/', {
+            method: 'POST',
+            body: JSON.stringify({ content: "aaa", gender: "1" }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
 
-             const summarizedResult = response.data;
-             const resultString = summarizedResult.data;
- 
-             setResultText(resultString);
-             setResultGenerated(true);
-         })
-         .catch((error) => {
-             console.error('Error in Summarization:', error);
-         });
- 
-     } catch (error) {
-       console.error('Error generating result:', error);
- 
-     } finally {
-       setLoading(false);
-     }
- };
-  
+        if (!response.ok) {
+            throw new Error('Failed to generate audio');
+        }
 
-  const handleSaveAndNextClick = () => {
-    // Handle save logic, for example, uploading the file to the server
-    console.log('Selected file:', selectedFile);
-    console.log('Selected gender:', selectedGender);
+        const contentDisposition = response.headers.get('Content-Disposition');
+        const fileNameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
+        const fileName = fileNameMatch ? fileNameMatch[1] : 'generated_audio.mp3';
 
-    // After saving, proceed to the next step
-    // router.push('/step5');
-  };
+        const audioBlob = await response.blob();
+
+        const audioURL = URL.createObjectURL(audioBlob);
+
+        setSaveAudioFile(audioURL);
+    } catch (error) {
+        console.error('Error generating audio:', error);
+        setFinishGenerate(true)
+    } finally {
+        setFinishGenerate(true)
+        setLoading(false);
+    }
+    };
+
+    const handleSaveAndNextClick = () => {
+        router.push('/step5');
+    };
 
   return (
     <html lang="en">
@@ -79,15 +82,22 @@ const Step4: React.FC = () => {
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
         <style>{`
-          body {
-            font-family: 'Inter', sans-serif;
-          }
-        `}</style>
+            body {
+              font-family: 'Inter', sans-serif;
+            }
+            .logo {
+              width: 70px;  // Set the width of the logo
+              height: 70px;  // Maintain aspect ratio
+              margin-bottom: 0px;  // Add margin to the bottom
+              margin-left: 0px;
+            }
+          `}</style>
       </head>
       <body className="bg-gray-900 text-white h-screen flex flex-col justify-center items-center">
         <div className="flex flex-row justify-between items-start w-full px-10">
           <div className="w-1/4">
             <ul className="space-y-2">
+              <img src="/logo.png" alt="Logo" className="logo" />
               <li>Step 1: Start</li>
               <li>Step 2: Avatar Image</li>
               <li>Step 3: Content</li>
@@ -131,7 +141,7 @@ const Step4: React.FC = () => {
               </div>
             )}
             {/* Radio buttons for Male and Female */}
-            {generateAudio && (
+            {generateAudio && !loading && !finishGenerate? (
               <div className="mt-4">
                 <label className="text-white mr-4">Male</label>
                 <input
@@ -146,16 +156,37 @@ const Step4: React.FC = () => {
                   type="radio"
                   name="gender"
                   value="female"
+                  checked={selectedGender === 'female'}
                   onChange={() => setSelectedGender('female')}
                 />
                 <button
                       className="bg-blue-600 text-white font-semibold py-2 px-6 rounded mt-2 ml-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                      onClick={handleSaveAndNextClick}
+                      onClick={handleStartGenerating}
                     >
                         Generate Audio
                 </button>
               </div>
 
+            ) : generateAudio && loading ? (
+                <div className="animate-spin h-5 w-5 border-t-2 border-b-2 border-blue-500 mx-auto my-4"></div>
+              ) : finishGenerate && !loading ?(
+                <div>
+                    {/* {saveAudioFile && (
+                    <audio controls className="ml-2">
+                        <source src={saveAudioFile} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </audio>
+                )} */}
+                  <p className="text-gray-400 mb-8">Finish generated</p>
+                  <button
+                      className="bg-blue-600 text-white font-semibold py-2 px-6 rounded mt-2 ml-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                      onClick={handleSaveAndNextClick}
+                    >
+                        Let's generate your AI avatar video!
+                </button>
+                </div>
+            ) : (
+                <div></div>
             )}
           </div>
         </div>

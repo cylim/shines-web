@@ -2,11 +2,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const App: React.FC = () => {
+const Step5: React.FC = () => {
   const router = useRouter();
 
   const handleStartClick = () => {
     router.push('/step2');
+  };
+
+  const handleSaveClick = () => {
+    
   };
 
   return (
@@ -35,18 +39,29 @@ const App: React.FC = () => {
           <div className="w-1/4">
             <ul className="space-y-2">
              <img src="/logo.png" alt="Logo" className="logo" />
-              <li className="bg-blue-500 text-white px-4 py-2 rounded-md">Step 1: Start</li>
+              <li>Step 1: Start</li>
               <li>Step 2: Avatar Image</li>
               <li>Step 3: Content</li>
               <li>Step 4: Audio</li>
-              <li>Step 5: Preview</li>
+              <li className="bg-blue-500 text-white px-4 py-2 rounded-md">Step 5: Preview</li>
             </ul>
           </div>
           <div className="w-3/4 flex flex-col items-center">
-            <h1 className="text-6xl font-bold mb-8">AI Avatar Video Generator</h1>
-              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={handleStartClick}>
-                Start
-              </button>
+            <h1 className="text-6xl font-bold mb-8">Here is your AI avatar video</h1>
+            <div className="flex justify-center gap-4">
+                <button
+                  className="bg-blue-600 text-white font-semibold py-2 px-6 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                  onClick={handleSaveClick}
+                >
+                  Save 
+                </button>
+                <button
+                  className="bg-blue-600 text-white font-semibold py-2 px-6 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                  onClick={handleStartClick}
+                >
+                  Generate again
+                </button>
+              </div>
           </div>
         </div>
       </body>
@@ -54,4 +69,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Step5;

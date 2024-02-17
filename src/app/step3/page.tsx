@@ -20,7 +20,7 @@ const Step3: React.FC = () => {
         await sleep(2000)
         try {
             
-            await ShineAPI.summarize({ content: text, language: "en" })
+            await ShineAPI.summarize({ content: text, language: "1" })
             .then((response) => {
 
                 const summarizedResult = response.data;
@@ -48,10 +48,22 @@ const Step3: React.FC = () => {
     return (
         <html lang="en">
           <body className="bg-gray-900 text-white h-screen flex flex-col justify-center items-center">
+            <style>{`
+            body {
+              font-family: 'Inter', sans-serif;
+            }
+            .logo {
+              width: 70px;  // Set the width of the logo
+              height: 70px;  // Maintain aspect ratio
+              margin-bottom: 0px;  // Add margin to the bottom
+              margin-left: 0px;
+            }
+          `}</style>
             <div className="flex flex-row justify-between items-start w-full px-10">
               {/* Left Box */}
               <div className="w-1/4 ml-1 mt-60">
                 <ul className="space-y-2">
+                  <img src="/logo.png" alt="Logo" className="logo" />
                   <li>Step 1: Start</li>
                   <li>Step 2: Avatar Image</li>
                   <li className="bg-blue-500 text-white px-4 py-2 rounded-md">Step 3: Content</li>

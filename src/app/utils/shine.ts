@@ -9,6 +9,15 @@ const shineReq = (payload: any) => {
   })
 }
 
+// const handleAudio = (response: AxiosResponse) => {
+//     const audioBlob = new Blob([response.data], { type: (response?.headers?.['Content-Type'] as string)?.toLowerCase() || 'audio/mp3' });
+  
+//     // Create a File object from the Blob
+//     const file = new File([audioBlob], 'uploaded_audio.mp3', { type: 'audio/mp3' });
+  
+//     return file;
+//   }
+
 const handleImage = (response: AxiosResponse) => {
     let image = btoa(
       new Uint8Array(response.data)
