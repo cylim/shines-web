@@ -93,6 +93,9 @@ devDependencies:
   '@tailwindcss/line-clamp':
     specifier: ^0.4.4
     version: 0.4.4(tailwindcss@3.4.1)
+  '@types/keccak':
+    specifier: ^3.0.4
+    version: 3.0.4
   '@types/node':
     specifier: ^20
     version: 20.11.17
@@ -6495,6 +6498,12 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/keccak@3.0.4:
+    resolution: {integrity: sha512-hdnkmbie7tE0yXnQQvlIOqCyjEsoXDVEZ3ACqO+F305XgUOW4Z9ElWdogCXXRAW/khnZ7GxM0t/BGB5bORKt/g==}
+    dependencies:
+      '@types/node': 20.11.17
     dev: true
 
   /@types/ms@0.7.34:
