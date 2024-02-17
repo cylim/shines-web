@@ -7,8 +7,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  base,
-  baseSepolia
+  polygonMumbai
 } from 'wagmi/chains';
 import {
   QueryClientProvider,
@@ -19,7 +18,7 @@ import { APP_NAME, WALLETCONNECT_KEY, SATELITE_ID } from '@/utils/env';
 const config = getDefaultConfig({
   appName: APP_NAME,
   projectId: WALLETCONNECT_KEY,
-  chains: [base, baseSepolia],
+  chains: [polygonMumbai],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
 

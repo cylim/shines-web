@@ -18,14 +18,15 @@ export const VideoScrollListItem = ({ item, index }: { item: Video, index: numbe
       </div> */}
       <div className="flex flex-row gap-4 justify-center">
         <div className="flex flex-col w-[100%] items-end">
-          {item.type === 'gif' ? <Image src={item.url} className={'h-[calc(100vh-240px)] w-auto'} /> : <video src={item.url} autoPlay loop className={'h-[calc(100vh-240px)] w-auto'} />}
+          {item.type === 'gif' 
+          ? <Image src={item.url} className={'max-w-[540px] h-[calc(100vh-320px)] w-auto'} /> 
+            : <video controls src={item.url} className={'max-w-[540px] h-[calc(100vh-320px)] w-auto'} />}
 
         </div>
-        <div className="flex flex-col w-1/5 justify-end">
-          <p>💕 {random()}</p>
+        <div className="flex flex-col w-[240px] justify-end text-3xl gap-4 ">
+          <p>💕 {random(10000)}</p>
           <p>💬 {random()}</p>
-          <p>💾 {random()}</p>
-          <p>🔗 {random()}</p>
+          <p>🔗 {random(30)}</p>
         </div>
       </div>
     </div>

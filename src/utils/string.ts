@@ -1,0 +1,56 @@
+import keccak from 'keccak'
+
+
+export const truncate = (str: string | undefined, length: number): string | undefined => {
+  if (!str) {
+    return str
+  }
+  if (str.length > length) {
+    return `${str.substring(0, length - 3)}...`
+  }
+  return str
+}
+
+export const stripHexPrefix = (value: string): string => {
+  return value.slice(0, 2) === '0x' ? value.slice(2) : value
+}
+
+export const toChecksumAddress = (address: string, chainId: string | null = null): string => {
+  if (typeof address !== 'string') {
+    return ''
+  }
+  if (address === 'aibot') {
+    return 'aibot'
+  }
+  try {
+    if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+      throw new Error(`Given address "${address}" is not a valid Ethereum address.`)
+    }
+
+    const stripAddress = stripHexPrefix(address).toLowerCase()
+    const prefix = chainId != null ? chainId.toString() + '0x' : ''
+    const keccakHash = keccak('keccak256')
+      .update(prefix + stripAddress)
+      .digest('hex')
+    let checksumAddress = '0x'
+
+    for (let i = 0; i < stripAddress.length; i++) {
+      checksumAddress += parseInt(keccakHash[i], 16) >= 8 ? stripAddress[i].toUpperCase() : stripAddress[i]
+    }
+
+    return checksumAddress
+  } catch (_) {
+    return address
+  }
+}
+
+export const isValidAddr = (address: string | undefined | null) => {
+  if (!address) {
+    return false
+  }
+  if (address === 'aibot') {
+    return true
+  }
+  const re = /^0x[a-fA-F0-9]{40}$/
+  return address?.match(re) || false
+}
