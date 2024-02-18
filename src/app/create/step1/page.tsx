@@ -17,6 +17,7 @@ const App: React.FC = () => {
             <div className="flex flex-row justify-between items-start w-full px-10">
               <div className="w-1/4">
                 <ul className="space-y-2">
+                  <img src="/logo.png" alt="Logo" className="logo" />
                   <li className="bg-blue-500 text-white px-4 py-2 rounded-md">Step 1: Start</li>
                   <li>Step 2: Avatar Image</li>
                   <li>Step 3: Content</li>

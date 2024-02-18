@@ -20,9 +20,6 @@ const Step4: React.FC = () => {
   const [content, setContent] = useState('This is a placeholder audio for testing purposes.')
   const [gender, setGender] = useState("1")
 
-  useEffect(() => {
-    // Add any side effects or initialization here if needed
-  }, []);
 
   const handleUploadClick = () => {
     setUploadingAudio(true);
@@ -37,17 +34,14 @@ const Step4: React.FC = () => {
     setGenerateAudio(true);
   };
 
-  // still have problem
   const handleStartGenerating = async () => {
     setLoading(true);
-    setFinishGenerate(true)
+    
     try {
         const url = await ShineAPI.generateAudio({content, gender})
-
-      setSaveAudioFile(url);
+        setSaveAudioFile(url);
     } catch (error) {
         console.error('Error generating audio:', error);
-        setFinishGenerate(true)
     } finally {
         setFinishGenerate(true)
         setLoading(false);
@@ -138,12 +132,6 @@ const Step4: React.FC = () => {
                 <div className="animate-spin h-5 w-5 border-t-2 border-b-2 border-blue-500 mx-auto my-4"></div>
               ) : finishGenerate && !loading ?(
                 <div>
-                    {/* {saveAudioFile && (
-                    <audio controls className="ml-2">
-                        <source src={saveAudioFile} type="audio/mpeg" />
-                        Your browser does not support the audio element.
-                    </audio>
-                )} */}
                     {!!saveAudioFile && <audio controls>
                       <source src={saveAudioFile} type="audio/mpeg" />
                       Your browser does not support the audio element.

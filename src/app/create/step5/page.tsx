@@ -12,8 +12,7 @@ const sleep = (milliseconds: number): Promise<void> => {
 const Step5: React.FC = () => {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string>("");
+    const [videoUrl, setVideoUrl] = useState<string>("");
     const [finishGenerate, setFinishGenerated] = useState<boolean>(false);
   
     const sleep = (milliseconds: number): Promise<void> => {
@@ -27,15 +26,23 @@ const Step5: React.FC = () => {
     const handleSaveClick = () => {
       
     };
-  
+    
+    // cannot not show video
     const handleStartGenerated = async () => {
-    // need to load video code
       setLoading(true);
-      const url = await ShineAPI.generateAiAvatarVideo({username: 'test'})
-      setVideoUrl(url)
-      setLoading(false);
-      setFinishGenerated(true);
-    };
+      
+      try {
+          const blobData = await ShineAPI.generateAiAvatarVideo({username: 'test'})
+          const blob = new Blob([blobData], { type: 'video/mp4' });
+          const url = URL.createObjectURL(blob);
+          console.log(url)
+          setVideoUrl(url);
+      } catch (error) {
+          console.error('Error generating audio:', error);
+      } finally {
+          setFinishGenerated(true)
+          setLoading(false);
+      }};
   
     return (
       <AppLayout>
@@ -53,7 +60,7 @@ const Step5: React.FC = () => {
             </div>
             <div className="w-3/4 flex flex-col items-center">
               <h1 className="text-6xl font-bold mb-8">Here is your AI avatar video</h1>
-              {!!videoUrl && <video src={videoUrl} />}
+              {!!videoUrl && <video controls src={videoUrl} className="mb-4" />}
               {!loading && finishGenerate ? (
                 <div className="flex justify-center gap-4">
                   <button
