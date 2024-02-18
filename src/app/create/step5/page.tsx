@@ -32,10 +32,7 @@ const Step5: React.FC = () => {
       setLoading(true);
       
       try {
-          const blobData = await ShineAPI.generateAiAvatarVideo({username: 'test'})
-          const blob = new Blob([blobData], { type: 'video/mp4' });
-          const url = URL.createObjectURL(blob);
-          console.log(url)
+          const url = await ShineAPI.generateAiAvatarVideo({username: 'test'})
           setVideoUrl(url);
       } catch (error) {
           console.error('Error generating audio:', error);
@@ -60,7 +57,7 @@ const Step5: React.FC = () => {
             </div>
             <div className="w-3/4 flex flex-col items-center">
               <h1 className="text-6xl font-bold mb-8">Here is your AI avatar video</h1>
-              {!!videoUrl && <video controls src={videoUrl} className="mb-4" />}
+              {!!videoUrl && <video controls src={videoUrl} className="mb-4 max-h-96 w-auto" />}
               {!loading && finishGenerate ? (
                 <div className="flex justify-center gap-4">
                   <button

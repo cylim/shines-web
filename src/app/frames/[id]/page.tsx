@@ -45,11 +45,11 @@ export default async function Home({
   // Here: do a server side side effect either sync or async (using await), such as minting an NFT if you want.
   const { id } = (params as any)
   const item = await get('avatars', [id as string])
-  console.log(item)
+  // console.log(item)
 
-  console.log("info: state is:", state);
+  // console.log("info: state is:", state);
   if (frameMessage) {
-    console.log("info: frameMessage is:", frameMessage);
+    // console.log("info: frameMessage is:", frameMessage);
     const {
       isValid,
       buttonIndex,

@@ -74,5 +74,6 @@ export const ShineAPI = {
   }).then(handleMedia),
   generateAiAvatarVideo: ({username}: any) => shineReq({
     endpoint: `generate_ai_avatar_video?username=${username}`,
+    responseType: 'arraybuffer',
   }).then(handleMedia),
 }
