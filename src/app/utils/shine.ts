@@ -10,6 +10,7 @@ const shineReq = (payload: any) => {
 }
 
 const handleMedia = (res: AxiosResponse) => {
+  console.log(res)
   const blob = new Blob([res.data], { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() });
   return URL.createObjectURL(blob)
 }
