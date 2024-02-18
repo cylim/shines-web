@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ShineAPI } from '../utils/shine';
 
 
 const sleep = (milliseconds: number): Promise<void> => {
@@ -10,12 +11,8 @@ const sleep = (milliseconds: number): Promise<void> => {
 const Step5: React.FC = () => {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [videoUrl, setVideoUrl] = useState<string>("");
     const [finishGenerate, setFinishGenerated] = useState<boolean>(false);
-  
-    const sleep = (milliseconds: number): Promise<void> => {
-      return new Promise(resolve => setTimeout(resolve, milliseconds));
-    };
   
     const handleStartClick = () => {
       router.push('/step2');
@@ -24,16 +21,26 @@ const Step5: React.FC = () => {
     const handleSaveClick = () => {
       
     };
-  
+    
+    // cannot not show video
     const handleStartGenerated = async () => {
-    // need to load video code
       setLoading(true);
-      await sleep(3000);  
-      setLoading(false);
-      setFinishGenerated(true);
-    };
+      
+      try {
+          const blobData = await ShineAPI.generateAiAvatarVideo({username: 'test'})
+          const blob = new Blob([blobData], { type: 'video/mp4' });
+          const url = URL.createObjectURL(blob);
+          console.log(url)
+          setVideoUrl(url);
+      } catch (error) {
+          console.error('Error generating audio:', error);
+      } finally {
+          setFinishGenerated(true)
+          setLoading(false);
+      }};
+
   
-    return (
+return (
       <html lang="en">
         <body className="bg-gray-900 text-white h-screen flex flex-col justify-center items-center">
           <div className="flex flex-row justify-between items-start w-full px-10">
@@ -49,6 +56,7 @@ const Step5: React.FC = () => {
             </div>
             <div className="w-3/4 flex flex-col items-center">
               <h1 className="text-6xl font-bold mb-8">Here is your AI avatar video</h1>
+              {!!videoUrl && <video controls src={videoUrl} className="mb-4" />}
               {!loading && finishGenerate ? (
                 <div className="flex justify-center gap-4">
                   <button

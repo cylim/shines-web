@@ -9,14 +9,10 @@ const shineReq = (payload: any) => {
   })
 }
 
-// const handleAudio = (response: AxiosResponse) => {
-//     const audioBlob = new Blob([response.data], { type: (response?.headers?.['Content-Type'] as string)?.toLowerCase() || 'audio/mp3' });
-  
-//     // Create a File object from the Blob
-//     const file = new File([audioBlob], 'uploaded_audio.mp3', { type: 'audio/mp3' });
-  
-//     return file;
-//   }
+const handleMedia = (res: AxiosResponse) => {
+  const blob = new Blob([res.data], { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() });
+  return URL.createObjectURL(blob)
+}
 
 const handleImage = (response: AxiosResponse) => {
     let image = btoa(
@@ -61,7 +57,7 @@ export const ShineAPI = {
   uploadAvatar: ({username, file}: any) => shineReq({
     data: {file},
     method: "POST",
-    endpoint: `upload-avatar?username=${username}`,
+    endpoint: `upload_avatar?username=${username}`,
     contentType: 'multipart/form-data'
   }),
   uploadAudio: ({username, file}: any) => shineReq({
@@ -70,12 +66,13 @@ export const ShineAPI = {
     endpoint: `upload-audio?username=${username}`,
     contentType: 'multipart/form-data'
   }),
-  generateAudio: ({content, gender = 1}: any) => shineReq({
+  generateAudio: ({content, gender = "1"}: any) => shineReq({
     data: {content, gender},
     method: "POST",
-    endpoint: `generate-audio`,
-  }),
+    endpoint: `generate_audio`,
+    responseType: 'arraybuffer',
+  }).then(handleMedia),
   generateAiAvatarVideo: ({username}: any) => shineReq({
-    endpoint: `generate-ai-avatar-video?username=${username}`,
-  }),
+    endpoint: `generate_ai_avatar_video?username=${username}`,
+  }).then(handleMedia),
 }
