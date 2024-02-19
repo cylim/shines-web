@@ -6,15 +6,15 @@ export const EmptyComponent = () => {
   const {isConnected} = useAccount()
 
   if (!isConnected) {
-    return <div className={'flex flex-col items-center justify-center gap-4 pt-4'}>
-      <p className={'text-9xl'}>🔮</p>
+    return <div className={'flex flex-col items-center justify-center gap-3 py-4'}>
+      <p className={'text-6xl'}>🔮</p>
       <p className={'text-lg'}>Connect to see details</p>
       <ConnectButton />
     </div>
   }
   
-  return <div className={'flex flex-col items-center justify-center gap-4 pt-4'}>
-    <p className={'text-9xl'}>🥹</p>
-    <p className={'text-lg'}>It is empty here, add some stuffs!</p>
+  return <div className={'flex flex-col items-center justify-center gap-3 py-4'}>
+    <p className={'text-6xl'}>🥹</p>
+    <p className={'text-lg'}>This person is too lazy to leave any stuffs here!</p>
   </div>
 }

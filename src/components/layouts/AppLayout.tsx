@@ -7,18 +7,24 @@ import Header from "./Header";
 import { Container } from "./Container";
 
 const AuthProvider = dynamic(async () => (await import('@/components/auth/AuthProvider')).AuthProvider, { ssr: false })
+const XmtpProvider = dynamic(() => import('@/utils/XmtpContext'), {
+  suspense: false,
+  ssr: false,
+})
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return <NextUIProvider>
     <AuthProvider>
-      <div className="background overflow-y-auto overflow-x-hidden">
-        <Header />
-        <div className="flex flex-col items-center justify-between w-[100%]">
-          <Container>
-            {children}
-          </Container>
+      <XmtpProvider>
+        <div className="background overflow-y-hidden overflow-x-hidden">
+          <Header />
+          <div className="flex flex-col items-center justify-between w-[100%]">
+            <Container>
+              {children}
+            </Container>
+          </div>
         </div>
-      </div>
+      </XmtpProvider>
       <Footer />
     </AuthProvider>
     <Toaster

@@ -5,7 +5,7 @@ import MessageList from './MessageList'
 import MessageInput from './MessageInput'
 import { toChecksumAddress } from '@/utils/string'
 import { extractAddress } from '@/utils/xmtp'
-import { Button, CircularProgress } from '@nextui-org/react'
+import { CircularProgress } from '@nextui-org/react'
 
 interface MessagePanelProps {
   conversationId: string
@@ -57,22 +57,17 @@ export const MessagePanel = ({ conversationId, onConnect }: MessagePanelProps) =
 
   if (!conversationId || !address || !client) {
     return (
-      <div className={'items-center pt-2'}>
-        <p>
+      <div className={'items-center justify-center flex flex-col pt-2'}>
+        <p className={'text-lg'}>
           {conversationId ? 'Login' : 'Select'}
         </p>
         <p >{conversationId ? '' : 'Start'}</p>
-        {!client ? (
-          <Button variant="faded" onClick={onConnect} className={'mt-2'}>
-            {'Connect'}
-          </Button>
-        ) : null}
       </div>
     )
   }
 
   return (
-    <div className={`flex flex-col overflow-y-hidden px-1 max-h-[calc(100vh - 90px)] sm:max-h-[590px] min-h-[calc(100vh - 90px)] sm:min-h-[590px]`}
+    <div className={`flex flex-col overflow-y-hidden px-1 max-h-[calc(100vh - 90px)] sm:max-h-[580px] min-h-[calc(100vh - 90px)] sm:min-h-[580px]`}
     >
       {!!error && (
         <div className={'items-center'}>

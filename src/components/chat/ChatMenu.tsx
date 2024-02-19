@@ -2,7 +2,7 @@ import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { isValidAddr, toChecksumAddress } from '@/utils/string'
 import dynamic from 'next/dynamic'
-import { Button, Menu } from '@nextui-org/react'
+import { Button, Dropdown, DropdownMenu, DropdownTrigger, Menu, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { useAccount } from 'wagmi'
 
 const ChatPanel = dynamic(() => import('@/components/chat/ChatPanel'), {
@@ -11,33 +11,31 @@ const ChatPanel = dynamic(() => import('@/components/chat/ChatPanel'), {
 })
 
 const ChatMenu = () => {
-  const chatRef = useRef(null)
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
   const [selected, setSelected] = useState<string | undefined>(undefined)
   const { address } = useAccount()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const [open, setOpen] = useState(!!(params.get('to') || false))
+
+  const handleOpen = (isOpen: boolean) => {
+    setOpen(isOpen)
+    if(!isOpen) {
+      setSelected(undefined)
+      const route = `${pathname?.split('?')?.[0]}`
+      router.replace(route, undefined)
+    }
   }
+
   const handleClose = () => {
-    setAnchorEl(null)
-    const route = `${pathname?.split('?')?.[0]}`
-    router.push(route, undefined)
+    handleOpen(false)
   }
 
   useEffect(() => {
-    const chatModal = params.get('chatModal') || false
     const to = params.get('to') || undefined
-    if (!!chatModal) {
-      setAnchorEl(chatRef.current)
-      if (isValidAddr(to as string)) {
-        setSelected(toChecksumAddress(to as string))
-      } else {
-        setSelected(undefined)
-      }
+    if (isValidAddr(to)) {
+      setOpen(true)
+      setSelected(toChecksumAddress(to as string))
     }
   }, [params])
 
@@ -46,31 +44,14 @@ const ChatMenu = () => {
   }
 
   return (
-    <>
-      <Button onClick={handleClick} id={`chat-modal-btn`}
-        key={`chat-modal-btn`}
-        aria-controls={open ? 'chat-modal' : undefined}
-        aria-haspopup="true"
-        ref={chatRef}
-        aria-expanded={open ? 'true' : undefined}>
-        📬
-      </Button>
-      <Menu key={'chat-modal'}
-        id={'chat-modal'}
-        // anchorEl={anchorEl as any}
-        // open={open}
-        onClose={handleClose}
-        className={'top-5 rounded-2xl'}
-        >
-        <div
-          className={'flex flex-col items-center min-w-[360px] min-h-[640px] max-w-[360px] max-h-[640px] overflow-hidden'}
-        >
-          {open ? (
-            <ChatPanel onClose={handleClose} selected={selected} setSelected={setSelected} />
-          ) : null}
-        </div>
-      </Menu>
-    </>
+    <Popover isOpen={open} onOpenChange={handleOpen} placement="bottom" offset={12}>
+      <PopoverTrigger>
+        <Button>Chat</Button>
+      </PopoverTrigger>
+      <PopoverContent className={'flex flex-col items-center min-w-[360px] min-h-[640px] max-w-[360px] max-h-[640px] overflow-hidden'}>
+          <ChatPanel onClose={handleClose} selected={selected} setSelected={setSelected} />
+      </PopoverContent>
+    </Popover>
   )
 }
 

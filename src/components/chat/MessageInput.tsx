@@ -18,14 +18,13 @@ const MessageInput = ({ onSend, scrollRef }: MessageInputProps): JSX.Element => 
 
   return (
     <div className={'pt-2 w-[100%]'}>
-      <div className={'flex flex-row'}>
+      <div className={'flex flex-row gap-2 items-center'  }>
         <Input
           type="text"
-          label={'Message'}
+          placeholder={'Message'}
           name="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          required
           fullWidth
         />
         <Button onClick={handleSubmit}>

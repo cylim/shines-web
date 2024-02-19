@@ -16,9 +16,11 @@ const isOnSameDay = (d1?: Date, d2?: Date): boolean => {
 const formatDate = (d?: Date) => d?.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
 const DateDivider = ({ date }: { date?: Date }): JSX.Element => (
-  <Kbd>
-    {formatDate(date)}
-  </Kbd>
+  <div className='flex flex-row justify-center'>
+    <Kbd className='text-center px-3 py-1 mx-1 my-2'>
+      {formatDate(date)}
+    </Kbd>
+  </div>
 )
 
 const ConversationBeginningNotice = (): JSX.Element => {
@@ -40,7 +42,7 @@ const MessageList = ({ messages, walletAddress, messagesEndRef }: MessageListPro
     lastMessageDate = msg.sent
 
     return (
-      <div key={msg.id}>
+      <div key={msg.id} className={'flex flex-col gap-2'}>
         {dateHasChanged ? <DateDivider date={msg.sent} /> : null}
         <MessageListItem
           message={msg}
@@ -53,15 +55,11 @@ const MessageList = ({ messages, walletAddress, messagesEndRef }: MessageListPro
 
   return (
     <div
-      className={'flex flex-1 overflow-y-auto max-h-[calc(100vh - 90px)] sm:max-h-[500px] '}
+      className={'flex flex-1 flex-col self-end w-[100%] overflow-y-scroll max-h-[calc(100vh - 140px)] sm:max-h-[500px] '}
     >
-      <div className={'self-end w=[100%]'} >
-        <div className={'flex flex-1 w-[100%]'}>
           <ConversationBeginningNotice />
           {messages?.map(renderMessage)}
           <div ref={messagesEndRef} />
-        </div>
-      </div>
     </div>
   )
 }

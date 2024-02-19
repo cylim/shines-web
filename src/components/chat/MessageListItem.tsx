@@ -1,4 +1,4 @@
-import { Avatar } from '@nextui-org/react'
+import { Avatar, Spacer } from '@nextui-org/react'
 import { DecodedMessage } from '@xmtp/xmtp-js'
 import Link from 'next/link'
 
@@ -16,23 +16,17 @@ export const MessageListItem = ({ isSender, message, nextMessage }: MessageListI
   }
 
   return (
-    <div
-      className={`flex flex-${isSender ? 'row-reverse' : 'row'} pb-${sameAuthor ? 1 : 2} items-end` }
-    >
+    <div className={`flex flex-${isSender ? 'row-reverse' : 'row'} pb-${sameAuthor ? 1 : 2} items-end gap-1 ${isSender ? 'justify-end' : 'justify-start'}`}>
       {isSender || sameAuthor ? null : (
         <Link href={`/users/${message.senderAddress as string}`} passHref style={{ cursor: 'pointer' }}>
           <Avatar name={message.senderAddress as string} size='md' />
         </Link>
       )}
-      {!isSender && sameAuthor ? <div className={'w-11'}/> : null}
+      {!isSender && sameAuthor ? <Spacer x={44} /> : null}
       <div className={'flex flex-col'}>
-          <p
-          className={`max-w-[26opx] min-w-[10px] text-left mx-1 px-2 py-1 rounded-2xl bg-${isSender ? 'primary-400' : 'gray-200'} text-${isSender ? 'white' : 'black'} `}
-          >
-            {
-              message.error ? `Error: ${message.error?.message}` : message.content // <Emoji text={message.content || ''} />
-            }
-          </p>
+        <p className={`max-w-[260px] min-w-[40px] text-left mx-1 px-2 py-1 rounded-2xl bg-${isSender ? 'blue-600' : 'gray-200'} text-lg text-${isSender ? 'white' : 'black'}`}>
+          {message.error ? `Error: ${message.error?.message}` : message.content}
+        </p>
       </div>
     </div>
   )

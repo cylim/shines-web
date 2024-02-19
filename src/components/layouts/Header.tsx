@@ -6,6 +6,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useBreakpoint } from '@/utils/useBreakpoints';
 import { Link } from '@nextui-org/react';
 import NextLink from 'next/link';
+import dynamic from 'next/dynamic';
+
+const ChatComponent = dynamic(() => import('@/components/chat/ChatMenu'), {
+  suspense: false,
+  ssr: false,
+})
 
 enum TabsEnum {
   Avatar = '/avatars',
@@ -54,7 +60,10 @@ export const Header = async () => {
         />
       </Link>
       {isConnected ? renderMenu() : null}
+      <div className={'flex flex-row gap-4'}>
+        {isConnected ? <ChatComponent /> : null}
         <ConnectButton showBalance={!isBelowSm} accountStatus={isBelowSm ? 'avatar' :"full"} />
+      </div>
     </div>
   </header>
 }
