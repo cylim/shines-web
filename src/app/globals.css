@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
+  --foreground-rgba: 0, 0, 0,100;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    --foreground-rgba: 230, 230, 230, 80;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgba(var(--foreground-rgba));
   background: linear-gradient(
       to bottom,
       transparent,
@@ -36,9 +36,6 @@ body {
   border: none;
   background: transparent;
   font-weight: 600;
-  letter-spacing: -0.04rem;
-  color: white!important;
-  font-size: 16px;
   transition: all 0.2s ease-in;
   border-bottom: 4px solid transparent;
   cursor: pointer;
@@ -88,10 +85,16 @@ body {
 }
 
 
-p.terms-conditions {
+p, span {
   font-size: 12px;
   line-height: 15px;
   color: white;
+}
+
+h1 {
+  font-size: 32px;
+  color: white;
+  font-weight: 600;
 }
 
 .box-wrapper {
@@ -103,12 +106,15 @@ p.terms-conditions {
   box-shadow: 1px 1px 20px rgba(0,0,0,0.19);
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-}
 .logo {
   width: 70px;  
   height: 70px;  
   margin-bottom: 0px; 
   margin-left: 0px;
+}
+
+.container {
+  max-height: calc(100vh - 128px);
+  min-height: calc(100vh - 128px);
+  overflow-y: scroll;
 }

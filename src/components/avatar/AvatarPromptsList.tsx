@@ -49,7 +49,7 @@ export const AvatarPromptsList = () => {
   }
 
   return (
-    <div className="w-full mx-auto shadow-lg mt-8 flex flex-col items-center">
+    <div className="w-full mx-auto mt-8 flex flex-col items-center">
       <div className="py-3">
         {!items.length ? <EmptyComponent /> : <Box className=" flex flex-col items-center justify-center gap-8">
           <div className={'text-black'}>

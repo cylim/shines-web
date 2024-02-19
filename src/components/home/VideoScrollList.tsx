@@ -59,7 +59,7 @@ const VideoScrollList = () => {
     width={280}
     height={280}
     priority
-  /> : <div id="scroll-container" className={' overflow-hidden min-h-[calc(100vh - 60px)] flex flex-col snap-y'}> 
+  /> : <div id="scroll-container" className={'max-h-[calc(100vh - 148px)] min-h-[calc(100vh - 148px)] flex flex-col snap-y'}> 
      {videos.map(renderItem)}
   </div>
 };

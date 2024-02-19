@@ -72,7 +72,7 @@ export const MessagePanel = ({ conversationId, onConnect }: MessagePanelProps) =
   }
 
   return (
-    <div className={`flex flex-col overflow-y-hidden px-1 max-h-[calc(100vh - 60px)] sm:max-h-[590px] min-h-[calc(100vh - 60px)] sm:min-h-[590px]`}
+    <div className={`flex flex-col overflow-y-hidden px-1 max-h-[calc(100vh - 90px)] sm:max-h-[590px] min-h-[calc(100vh - 90px)] sm:min-h-[590px]`}
     >
       {!!error && (
         <div className={'items-center'}>

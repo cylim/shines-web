@@ -53,7 +53,7 @@ const MessageList = ({ messages, walletAddress, messagesEndRef }: MessageListPro
 
   return (
     <div
-      className={'flex flex-1 overflow-y-auto max-h-[calc(100vh - 60px)] sm:max-h-[500px] '}
+      className={'flex flex-1 overflow-y-auto max-h-[calc(100vh - 90px)] sm:max-h-[500px] '}
     >
       <div className={'self-end w=[100%]'} >
         <div className={'flex flex-1 w-[100%]'}>

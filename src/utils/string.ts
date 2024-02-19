@@ -1,15 +1,8 @@
 import keccak from 'keccak'
 
 
-export const truncate = (str: string | undefined, length: number): string | undefined => {
-  if (!str) {
-    return str
-  }
-  if (str.length > length) {
-    return `${str.substring(0, length - 3)}...`
-  }
-  return str
-}
+export const truncate = (addr: string, count = 4): string => `${addr.substring(0, count + 2)}...${addr.substring(addr.length - count)}`
+
 
 export const stripHexPrefix = (value: string): string => {
   return value.slice(0, 2) === '0x' ? value.slice(2) : value

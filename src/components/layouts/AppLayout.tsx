@@ -4,17 +4,20 @@ import { NextUIProvider } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import Footer from "./Footer";
 import Header from "./Header";
+import { Container } from "./Container";
 
 const AuthProvider = dynamic(async () => (await import('@/components/auth/AuthProvider')).AuthProvider, { ssr: false })
 
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return <NextUIProvider>
     <AuthProvider>
-      <div className="background overflow-y-auto bg-cover bg-center bg-[#00000090] bg-blend-hue overflow-x-hidden">
+      <div className="background overflow-y-auto overflow-x-hidden">
         <Header />
-        <main className="flex min-h-screen flex-col items-center justify-between px-10">
-          {children}
-        </main>
+        <div className="flex flex-col items-center justify-between w-[100%]">
+          <Container>
+            {children}
+          </Container>
+        </div>
       </div>
       <Footer />
     </AuthProvider>

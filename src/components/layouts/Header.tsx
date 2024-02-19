@@ -8,29 +8,36 @@ import { Link } from '@nextui-org/react';
 import NextLink from 'next/link';
 
 enum TabsEnum {
-  Avatar = 'avatars',
-  Videos = 'videos'
+  Avatar = '/avatars',
+  Videos = '/videos',
+  Profile = '/u/[address]'
 }
 
 const tabs = [
-  { title: 'Avatar', value: TabsEnum.Avatar },
-  { title: 'Videos', value: TabsEnum.Videos },
+  // { title: 'Avatar', value: TabsEnum.Avatar },
+  // { title: 'Videos', value: TabsEnum.Videos },
+  { title: 'Profile', value: TabsEnum.Profile },
 ]
 
 export const Header = async () => {
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
   const router = useRouter()
   const pathname = usePathname()
   const { isBelowSm } = useBreakpoint("sm");
 
   const setActiveTab = (val: string) => {
-    router.push(`/${val}`)
+    router.push(val.replace('[address]', address as string))
   }
 
   const renderMenu = () => {
     return <div className="navigation flex-row items-center justify-start flex flex-1">
       {tabs.map((t) => (
-        <button key={`${t.title}-tab`} onClick={() => setActiveTab(t.value)} className={`navigation-link ${pathname === t.value ? 'active' : ''}`}>{t.title}</button>
+        <button
+          key={`${t.title}-tab`} 
+          onClick={() => setActiveTab(t.value)} 
+          className={`navigation-link text-2xl  ${pathname.includes(t.value) ? 'text-blue-400' : 'text-white'}`}>
+            {t.title}
+          </button>
       ))}
     </div>
   }
@@ -41,9 +48,8 @@ export const Header = async () => {
         <Image
           src="/shine.png"
           alt="Shine Logo"
-          className="dark:invert"
-          width={48}
-          height={48}
+          width={72}
+          height={72}
           priority
         />
       </Link>

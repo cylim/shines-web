@@ -4,13 +4,7 @@ import { Image } from "@nextui-org/react";
 
 
 export const VideoScrollListItem = ({ item, index }: { item: Video, index: number }) => (
-  <section className={`scroll-${index} flex flex-col h-[calc(100vh-65px)]`}>
-    <div className="w-14">
-      {/* <div className="rounded-full w-14 h-14 overflow-clip">
-        <img src={video.snippet.thumbnails.default.url} alt="Avatar" />
-      </div> */}
-    </div>
-    <div className="flex-1 flex flex-col gap-4">
+  <section className={`scroll-${index} flex flex-col h-[calc(100vh-148px)] gap-4 justify-center`}>
       {/* <div className="p-2">
         <p className="line-clamp-2 hover:line-clamp-none"><strong>
           {video.snippet.title}</strong>
@@ -29,6 +23,5 @@ export const VideoScrollListItem = ({ item, index }: { item: Video, index: numbe
           <p>🔗 {random(30)}</p>
         </div>
       </div>
-    </div>
   </section>
 )
