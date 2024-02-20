@@ -51,7 +51,7 @@ const Step3: React.FC = () => {
         <main className="bg-gray-900 text-white h-screen flex flex-col justify-center w-[100%] items-center">
             <div className="flex flex-row justify-between items-start w-full px-10">
               {/* Left Box */}
-              <div className="w-1/4 ml-1 mt-60">
+              <div className="w-1/4 ml-1 mt-30">
                 <ul className="space-y-2">
                   <img src="/logo.png" alt="Logo" className="logo" />
                   <li>Step 1: Start</li>
@@ -63,8 +63,8 @@ const Step3: React.FC = () => {
               </div>
               
               {/* Main Content */}
-              <div className="flex justify-center items-center h-screen">
-                <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-12">
+              <div className="flex ml-1 mt-30">
+                <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-6">
                   {/* Left Box Content */}
                   <div className="flex flex-col items-center">
                     <h2 className="text-white text-2xl mb-2">Your text</h2>

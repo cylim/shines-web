@@ -90,7 +90,7 @@ const Step2: React.FC = () => {
                             src={generatedImage}
                             alt="Generated"
                             className="rounded-lg"
-                            style={{ maxWidth: '100%', maxHeight: '200px' }}
+                            style={{ maxWidth: '300px', maxHeight: '300px' }}
                           />
                           <br />
                           <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4" onClick={ToNextPage}>
@@ -105,7 +105,7 @@ const Step2: React.FC = () => {
                             src={URL.createObjectURL(selectedFile)}
                             alt="Selected"
                             className="rounded-lg"
-                            style={{ maxWidth: '100%', maxHeight: '200px' }}
+                            style={{ maxWidth: '300px', maxHeight: '300px' }}
                           />
                           <br />
                           <label htmlFor="user-input" className="text-white mt-4 mb-2">
