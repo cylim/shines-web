@@ -9,7 +9,7 @@ const SidebarItem = ({ item, fallback }: { item: any, fallback: string }) =>{
   return <Link as={NextLink} href={`?tab=${item.url}`} className={`text-lg font-semibold px-4 py-2  ${isActive ? 'bg-blue-500 text-white rounded-md': ''}`}>{item.title}</Link>
 }
 
-export const Sidebar = ({ items, fallback, children }: { items: any, fallback: string, children: React.ReactNode }) =>{
+export const Sidebar = ({ items, fallback, children = [] }: { items: any, fallback: string, children?: React.ReactNode }) =>{
   return <div className="w-1/4">
     <div className="flex flex-col gap-3">
       {children}
