@@ -16,9 +16,9 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return <NextUIProvider>
     <AuthProvider>
       <XmtpProvider>
-        <div className="background overflow-y-hidden overflow-x-hidden">
+        <div className="background overflow-hidden max-h-screen">
           <Header />
-          <div className="flex flex-col items-center justify-between w-[100%]">
+          <div className="flex flex-col items-center justify-between w-[100%] overflow-hidden max-h-screen">
             <Container>
               {children}
             </Container>
