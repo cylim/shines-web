@@ -56,7 +56,7 @@ export const UserContainer = () => {
 
 
   return (
-    <div className='flex flex-col justify-start w-[100%]'>
+    <div className='flex flex-col justify-start w-[100%] overflow-y-scroll'>
       <User classNames={{ wrapper: 'w-[100%]', name: 'text-lg' }} name={truncate(userAddress, 6)} description={(
         <div className={'flex flex-row items-center gap-2'}>
           <Link href={`https://mumbai.polygonscan.com/address/${userAddress}`} size="md" isExternal>
