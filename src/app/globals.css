@@ -117,12 +117,12 @@ h1 {
 .container {
   max-height: calc(100vh - 128px);
   min-height: calc(100vh - 128px);
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 .scroll-container {
-  max-height: calc(100vh - 158px);
-  min-height: calc(100vh - 158px);
+  max-height: calc(100vh - 168px);
+  min-height: calc(100vh - 168px);
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
 }

@@ -1,19 +1,25 @@
 'use client'
 import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Textarea } from "@nextui-org/react"
-import React, { ChangeEvent, useCallback, useState } from "react"
-import { Input } from "@nextui-org/react";
+import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
 import { insertRow, upload } from "@/utils/firebaseHelper";
 import { useDropzone } from 'react-dropzone';
+import { useSearchParams } from "next/navigation";
 
 export const CreateModal = () => {
-  const [opened, setOpen] = useState(false)
+  const params = useSearchParams()
+  const [opened, setOpen] = useState(!!params.get('avatar'))
   const [file, setFile] = useState<File | undefined>(undefined)
   const [loading, setLoading] = useState(false)
   const [description, setDescription] = useState("")
   const { address } = useAccount();
   const [selectedImage, setSelectedImage] = useState<any>(null);
+
+  useEffect(() => {
+    const open = !!params.get('avatar')
+    setOpen(open)
+  }, [params])
 
   const onDrop = useCallback((acceptedFiles: any) => {
     const image = acceptedFiles[0];

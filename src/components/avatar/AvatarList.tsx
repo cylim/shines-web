@@ -3,14 +3,10 @@
 import { Avatar } from "@/utils/scheme";
 import { AvatarItem } from "@/components/avatar/AvatarItem";
 import { useAccount } from "wagmi";
-import dynamic from "next/dynamic";
 import { EmptyComponent } from "../EmptyComponent";
 import { CircularProgress } from "@nextui-org/react";
 
-
 export const AvatarList = ({ items, loading }: { items: Avatar[], loading: boolean}) => {
-  const { address, isConnected } = useAccount()
-
   if(loading){
     return <div className="w-full mx-auto mt-8 flex flex-col items-center">
       <CircularProgress size="lg" />

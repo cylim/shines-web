@@ -1,14 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Avatar, Video } from "@/utils/scheme";
+import { Video } from "@/utils/scheme";
 import { VideoListItem } from "./VideoListItem";
 import { useAccount } from "wagmi";
-import dynamic from "next/dynamic";
 import { EmptyComponent } from "../EmptyComponent";
 import { CircularProgress } from "@nextui-org/react";
 
-const CreateModal = dynamic(async () => (await import('@/components/avatar/CreateModal')).CreateModal, { ssr: false })
 
 export const VideoList = ({ items, loading }: { items: Video[], loading: boolean}) => {
   const { address, isConnected } = useAccount()

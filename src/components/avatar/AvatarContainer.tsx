@@ -35,9 +35,6 @@ export const AvatarContainer = () => {
   };
 
   return (
-    <>
     <AvatarList items={avatars} loading={isLoadingAvatars || isFetchingAvatars} />
-      {!isConnected ? null : <CreateModal />}
-    </>
   )
 }
