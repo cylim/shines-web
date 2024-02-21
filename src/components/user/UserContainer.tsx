@@ -84,7 +84,7 @@ export const UserContainer = () => {
           </div>
         )} />
       </Sidebar>
-      <div className='flex flex-col justify-start w-[100%] overflow-y-scroll'>
+      <div className='flex flex-col justify-start w-[100%] overflow-y-scroll max-h-screen'>
         {tab === undefined || tab === 'avatars' ? <>
           <h1 className='pt-12'>Avatars</h1>
           <AvatarList items={avatars} loading={isLoadingAvatars || isFetchingAvatars} />
@@ -97,7 +97,6 @@ export const UserContainer = () => {
           <h1 className='pt-12'>Posts</h1>
           <VideoList items={videos} loading={isLoadingVideos || isFetchingVideos} />
         </> : null}
-
         <Spacer y={40} />
       </div>
     </div>

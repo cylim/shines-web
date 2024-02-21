@@ -5,10 +5,12 @@ import { VideoListItem } from "./VideoListItem";
 import { useAccount } from "wagmi";
 import { EmptyComponent } from "../EmptyComponent";
 import { CircularProgress } from "@nextui-org/react";
+import { useLens } from "@/utils/lens";
 
 
 export const VideoList = ({ items, loading }: { items: Video[], loading: boolean}) => {
-  const { address, isConnected } = useAccount()
+  const { isConnected } = useAccount()
+  const lensClient = useLens()
 
   if (loading) {
     return <div className="w-full mx-auto mt-8 flex flex-col items-center">
@@ -21,7 +23,7 @@ export const VideoList = ({ items, loading }: { items: Video[], loading: boolean
   }
 
   const renderItem = (item: Video) => {
-    return <VideoListItem key={item.id} item={item} />
+    return <VideoListItem key={item.id} item={item} lensClient={lensClient} />
   }
 
   return (
