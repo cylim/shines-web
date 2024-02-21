@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCCaAdo9XE_Qy19dIAcIKPD26qlvbEb8EE",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
   authDomain: "shines-web.firebaseapp.com",
   databaseURL: "https://shines-web-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "shines-web",
