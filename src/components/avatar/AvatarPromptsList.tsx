@@ -49,17 +49,17 @@ export const AvatarPromptsList = () => {
   }
 
   return (
-    <div className="w-full mx-auto mt-8 flex flex-col items-center">
-      <div className="py-3">
-        {!items.length ? <EmptyComponent /> : <Box className=" flex flex-col items-center justify-center gap-8">
+    <div className="w-full mx-auto mt-8 flex flex-col items-center overflow-y-scroll py-3">
+        {!items.length ? <EmptyComponent /> : 
+        <div className={'flex flex-col gap-4 w-[100%] mx-4 items-center justify-center'}>
           <div className={'text-black'}>
             <Image src={avatar?.sourceUrl} height={320} width={320} />
             <p className="text-center pt-4">{avatar?.description}</p>
           </div>
           {items.map(renderAvatarItem)}
-        </Box>}
+        </div>
+        }
         
-      </div>
 
     </div>
   );
