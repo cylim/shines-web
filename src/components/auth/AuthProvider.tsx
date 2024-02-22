@@ -13,7 +13,7 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
-import { APP_NAME, WALLETCONNECT_KEY, SATELITE_ID } from '@/utils/env';
+import { APP_NAME, WALLETCONNECT_KEY } from '@/utils/env';
 
 const config = getDefaultConfig({
   appName: APP_NAME,

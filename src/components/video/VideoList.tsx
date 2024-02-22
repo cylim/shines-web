@@ -27,10 +27,10 @@ export const VideoList = ({ items, loading }: { items: Video[], loading: boolean
   }
 
   return (
-    <div className="w-full mx-auto mt-2 flex flex-col items-start">
+    <div className="w-full mx-auto mt-2 flex flex-col">
       <div className="py-3">
         {!items.length ? <EmptyComponent /> : null}
-        <div className="flex flex-row flex-wrap justify-start gap-4">
+        <div className="flex flex-row flex-wrap items-center justify-start gap-4">
           {items.map(renderItem)}
         </div>
       </div>

@@ -1,16 +1,18 @@
 
 'use client'
-import {  Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import { Video } from "@/utils/scheme";
 import NextLink from 'next/link'
 import { LensClient, PublicationMetadataLicenseType, isRelaySuccess } from "@lens-protocol/client";
 import toast from "react-hot-toast";
-import { polygonMumbai } from 'viem/chains'
-import { useEthersSigner } from "@/utils/ethers";
+import axios from "axios";
+import { useAccount } from "wagmi";
+import { PINATA_JWT } from "@/utils/env";
 
 export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: LensClient | undefined }) => {
+  const { address } = useAccount()
   const share = async () => {
-    if (!lensClient ) { return }
+    if (!lensClient) { return }
 
     const metadata = {
       title: 'Great video!',
@@ -24,24 +26,44 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
       }
     }
 
-    const dataToUpload = JSON.stringify(metadata);
+    const dataToUpload = JSON.stringify({
+      pinataMetadata: {
+        name: item.id,
+        keyvalues: {
+          owner: item.address
+        }
+      },
+      pinataContent: metadata
+    });
     try {
-      // const receipt = await irys.upload(dataToUpload);
-      // const metadataUrl = `https://gateway.irys.xyz/${receipt.id}`
-      // console.log(`Data uploaded ==> https://gateway.irys.xyz/${metadataUrl}`);
-      
-      // const result = await lensClient.publication.postOnchain({
-      //   contentURI: metadataUrl, // or arweave
-      // });
-      
-      // const resultValue = result.unwrap();
-      // if (!isRelaySuccess(resultValue)) {
-      //   toast('posted failed')
-      //   console.warn(`Something went wrong`, resultValue);
-      //   return;
-      // }
-      
+      const resFile = await axios({
+        method: "post",
+        url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+        data: dataToUpload,
+        headers: {
+          Authorization: `Bearer ${PINATA_JWT}`,
+          // 'pinata_api_key': `${process.env.REACT_APP_PINATA_API_KEY}`,
+          // 'pinata_secret_api_key': `${process.env.REACT_APP_PINATA_API_SECRET}`,
+          "Content-Type": "application/json"
+        },
+      });
+
+      const ipfsUrl = `ipfs://${resFile.data.IpfsHash}`;
+      console.log('IPFS metadata:', ipfsUrl)
+
+      const result = await lensClient.publication.postOnchain({
+        contentURI: ipfsUrl,
+      });
+
+      const resultValue = result.unwrap();
+      if (!isRelaySuccess(resultValue)) {
+        toast('posted failed')
+        console.warn(`Something went wrong`, resultValue);
+        return;
+      }
+
       console.log(`Transaction was successfully broadcasted with txId ${resultValue.txId}`);
+      console.log(`Details:`, resultValue)
       toast('posted')
     } catch (e) {
       console.log("Error uploading data ", e);
@@ -55,8 +77,11 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
       </div>
 
       <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
-        <Button radius="full" onClick={share} color={'primary'} className="w-[220px]">Share</Button>
-      </div>
+        {
+          address === item.address
+            ? <Button radius="full" onClick={share} color={'primary'} className="w-[220px]">Share</Button>
+            : null
+        }      </div>
     </div>
 
   </Link>
