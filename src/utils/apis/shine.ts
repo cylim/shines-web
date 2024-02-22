@@ -14,6 +14,13 @@ const handleMedia = (res: AxiosResponse) => {
   return URL.createObjectURL(blob)
 }
 
+const handleVideo = (res: AxiosResponse) => {
+  const blob = new Blob([res.data], { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() });
+  const file = new File([blob], 'uploaded_image.png', { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() || 'image/png' });
+
+  return file
+}
+
 const handleImage = (response: AxiosResponse) => {
     let image = btoa(
       new Uint8Array(response.data)
@@ -75,5 +82,5 @@ export const ShineAPI = {
   generateAiAvatarVideo: ({username}: any) => shineReq({
     endpoint: `generate_ai_avatar_video?username=${username}`,
     responseType: 'arraybuffer',
-  }).then(handleMedia),
+  }).then(handleVideo),
 }
