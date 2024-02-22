@@ -91,11 +91,12 @@ export default async function Home({
         state={state}
         previousFrame={previousFrame}
       >
-        <FrameImage aspectRatio="1:1">
-          <div tw={`h-full w-full flex flex-col items-end justify-end bg-black bg-cover bg-center`} 
-            style={{ backgroundImage: `url('${item?.sourceUrl || 'https://wrbih-aiaaa-aaaal-adofa-cai.icp0.io/resources/0x950911F03616a05d5A1F96E76F783fAdeb53778c-1707986926701-avatar.png'}')`, backgroundPosition: 'center', backgroundRepeat: 'repeat', backgroundSize: 'cover' }}
+        {/* @ts-ignore */}
+        <FrameImage aspectRatio="1:1" options={{height: 480,width:480}}>
+          <div tw={`h-[480px] w-[480px] flex flex-col items-end justify-end bg-black bg-cover bg-center`} 
+            style={{ backgroundImage: `url('${item?.sourceUrl || 'https://wrbih-aiaaa-aaaal-adofa-cai.icp0.io/resources/0x950911F03616a05d5A1F96E76F783fAdeb53778c-1707986926701-avatar.png'}')`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
           >
-            <div tw="bg-white w-full color-black px-4 py-2 text-5xl" >
+            <div tw="bg-white w-full color-black px-4 py-2 text-xl" >
               {!state?.active ? item?.description || 'Help me to generate new prompt! Tips might given to the best prompt!' : 'Thanks for submitting the prompt!'}
             </div>
           </div>
