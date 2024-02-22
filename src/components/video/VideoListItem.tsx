@@ -3,12 +3,13 @@
 import { Button, Link } from "@nextui-org/react";
 import { Video } from "@/utils/scheme";
 import NextLink from 'next/link'
-import { LensClient, PublicationMetadataLicenseType, isRelaySuccess } from "@lens-protocol/client";
+import { LensClient, isRelaySuccess } from "@lens-protocol/client";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import { PINATA_JWT } from "@/utils/env";
-import { useEffect } from "react";
+import { shortVideo, MetadataLicenseType, MediaVideoMimeType } from '@lens-protocol/metadata';
+
 
 export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: LensClient | undefined }) => {
   const { address } = useAccount()
@@ -19,17 +20,17 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
       return
      }
 
-    const metadata = {
-      title: 'Great video!',
-      video: {
-        item: item.url,
-        type: 'video/mp4',
-        cover: item.url,
-        duration: 60,
-        altTag: `AI short video of ${await lensClient.authentication.getProfileId()}`,
-        license: PublicationMetadataLicenseType.Cco,
-      }
-    }
+    const metadata = shortVideo({
+       title: `AI short video of ${await lensClient.authentication.getProfileId()}`,
+       video: {
+         item: item.url,
+         type: MediaVideoMimeType.MP4,
+         cover: item.url,
+         duration: 60,
+         altTag: `AI short video of ${await lensClient.authentication.getProfileId()}`,
+         license: MetadataLicenseType.CCO,
+       }
+     })
 
     const dataToUpload = JSON.stringify({
       pinataMetadata: {
@@ -73,8 +74,7 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
     }
   }
 
-  return <Link as={NextLink} href={`#videos/${item.id}`} prefetch={false}>
-    <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
+  return  <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
       <div className="font-semibold text-2xl grow flex flex-row items-start">
         <video controls src={item.url} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />
       </div>
@@ -87,5 +87,4 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
         }      </div>
     </div>
 
-  </Link>
 }

@@ -1,16 +1,18 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { isValidAddr, truncate } from '@/utils/string';
-import { Avatar, Video } from '@/utils/scheme';
+import { isValidAddr } from '@/utils/string';
+import { Avatar, Post, Video } from '@/utils/scheme';
 import { AvatarList } from '@/components/avatar/AvatarList';
 import { list as listDoc } from "@/utils/firebaseHelper";
 import { VideoList } from '@/components/video/VideoList';
 import { useQuery } from '@tanstack/react-query';
 import { Spacer } from '@nextui-org/react';
-import { useAccount } from 'wagmi';
 import { Sidebar } from '../layouts/Sidebar';
 import { UserInfo } from './UserInfo';
+import { useLens } from '@/utils/lens';
+import { PublicationMetadataMainFocusType, PublicationType } from '@lens-protocol/client';
+import { PostList } from '../post/PostList';
 
 const sidebar = [
   { title: 'Avatars', url: 'avatars' },
@@ -19,10 +21,11 @@ const sidebar = [
 ]
 
 export const UserContainer = () => {
-  const { address, isConnected } = useAccount()
+  const lensClient = useLens()
   const params = useParams()
   const searchParams = useSearchParams()
   const [tab, setTab] = useState(searchParams.get('tab') || undefined)
+  const [posts, setPosts] = useState<Post[]>([])
   const userAddress = params?.address as string
   const { data: avatars = [], isLoading: isLoadingAvatars, isFetching: isFetchingAvatars, refetch: refetchAvatars } = useQuery({
     enabled: !!isValidAddr(userAddress),
@@ -54,19 +57,36 @@ export const UserContainer = () => {
     };
   }, []);
 
+  const getLensPosts = useCallback(async () => {
+    const id = await lensClient?.authentication.getProfileId()
+    console.log('lens profile id', id)
+    if(!id) { return }
+    const res = await lensClient?.publication.fetchAll({ where: { 
+      from: [id],
+      publicationTypes: [PublicationType.Post], 
+      metadata: {
+        mainContentFocus: [PublicationMetadataMainFocusType.ShortVideo]
+      }
+    }})
+    console.log('getLensPosts', res?.items)
+    setPosts((res?.items || []) as any)
+
+  }, [lensClient])
+
   const list = async () => {
     if (!isValidAddr(userAddress)) return
 
     refetchAvatars()
     refetchVideos()
+    getLensPosts()
   };
 
   useEffect(() => {
-    if (isValidAddr(userAddress)) {
-      list()
+    if (lensClient) {
+      getLensPosts()
     }
 
-  }, [userAddress])
+  }, [lensClient])
 
 
   return (
@@ -81,11 +101,11 @@ export const UserContainer = () => {
         </> : null}
         {tab === undefined || tab === 'videos' ? <>
           <h1 className='pt-12'>Videos</h1>
-          <VideoList items={videos} loading={isLoadingVideos || isFetchingVideos} />
+          <VideoList items={videos} loading={isLoadingVideos || isFetchingVideos} lensClient={lensClient} />
         </> : null}
         {tab === undefined || tab === 'posts' ? <>
           <h1 className='pt-12'>Posts</h1>
-          <VideoList items={videos} loading={isLoadingVideos || isFetchingVideos} />
+          <PostList items={posts} loading={isLoadingVideos || isFetchingVideos} lensClient={undefined} />
         </> : null}
         <Spacer y={72} />
       </div>

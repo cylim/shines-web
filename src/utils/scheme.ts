@@ -1,3 +1,5 @@
+import { AnyPublicationFragment, PublicationMetadataMediaVideoFragment } from "@lens-protocol/client"
+
 type DatabaseRow = {
   timestamp: {
     seconds: number
@@ -31,3 +33,17 @@ export type Prompt = {
   profileImage?: string
   userData: any
 } & DatabaseRow
+
+export type Post = {
+  id: string
+  by: {
+    id: string,
+    ownedBy: {
+      address: string
+    }
+  }
+  metadata: {
+    title: string,
+    asset: PublicationMetadataMediaVideoFragment
+  }
+} 

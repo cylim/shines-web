@@ -12,6 +12,7 @@
     "@airstack/airstack-react": "^0.6.2",
     "@farcaster/core": "^0.14.0",
     "@lens-protocol/client": "2.0.0-alpha.33",
+    "@lens-protocol/metadata": "^1.1.5",
     "@nextui-org/react": "^2.2.9",
     "@noble/ed25519": "^2.0.0",
     "@rainbow-me/rainbowkit": "2",
