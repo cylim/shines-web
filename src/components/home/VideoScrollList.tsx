@@ -1,6 +1,6 @@
-import { Video } from "@/utils/scheme";
+import { Feed } from "@/utils/scheme";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { VideoScrollListItem } from "./VideoScrollListItem";
 import { fakedata } from "@/utils/fakedata";
 import { Sidebar } from "@/components/layouts/Sidebar";
@@ -16,20 +16,20 @@ const sidebar = [
 
 const VideoScrollList = () => {
   const searchParams = useSearchParams()
-  const { data: videos = fakedata, isLoading: isLoadingVideos, isFetching: isFetchingVideos, refetch: refetchVideos } = useQuery({
+  const { data: feeds = [], isLoading: isLoadingVideos, isFetching: isFetchingVideos, refetch: refetchVideos } = useQuery({
     enabled: true,
-    queryKey: ['videos', searchParams.get('tab') || 'home'],
-    queryFn: async () => ((await listDoc("videos") as Video[]) || []).sort(() => Math.random() - 0.5),
+    queryKey: ['feeds', searchParams.get('tab') || 'home'],
+    queryFn: async () => ((await listDoc("posts") as Feed[]) || []).sort(() => Math.random() - 0.5),
     refetchOnMount: true,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
   })
 
-  useEffect(() => {
-    refetchVideos()
-  }, [searchParams]);
+  // useEffect(() => {
+  //   refetchVideos()
+  // }, [searchParams]);
 
-  const renderItem = (item: Video, index: number) => {
+  const renderItem = (item: Feed, index: number) => {
     return <VideoScrollListItem key={item.id} item={item} index={index} />
   }
 
@@ -41,7 +41,7 @@ const VideoScrollList = () => {
         alt="Shine Logo"
         width={280}
         height={280}
-        priority /> : videos.map(renderItem)}
+        priority /> : feeds.map(renderItem)}
     </div>
   </div>
 };

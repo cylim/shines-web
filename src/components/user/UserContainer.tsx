@@ -104,7 +104,7 @@ export const UserContainer = () => {
           <VideoList items={videos} loading={isLoadingVideos || isFetchingVideos} lensClient={lensClient} />
         </> : null}
         {tab === undefined || tab === 'posts' ? <>
-          <h1 className='pt-12'>Posts</h1>
+          <h1 className='pt-12'>Lens</h1>
           <PostList items={posts} loading={isLoadingVideos || isFetchingVideos} lensClient={undefined} />
         </> : null}
         <Spacer y={72} />
