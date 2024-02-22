@@ -54,7 +54,8 @@ export const AvatarPromptsList = () => {
         <div className={'flex flex-col gap-4 w-[100%] mx-4 items-center justify-center'}>
           <div className={'text-black'}>
             <Image src={avatar?.sourceUrl} height={320} width={320} />
-            <p className="text-center pt-4">{avatar?.description}</p>
+            <p className="text-center pt-4 text-xl text-gray-500">requests</p>
+            <p className="text-center pt-2 text-4xl">{avatar?.description}</p>
           </div>
           {items.map(renderAvatarItem)}
         </div>

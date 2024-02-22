@@ -40,7 +40,7 @@ export const AvatarPromptItem = ({ item, file }: { item: Prompt, file: File | un
     }
   }
 
-  return <div className="flex flex-1 flex-col gap-4 border-slate-500 border-1 p-3 rounded-lg w-[100%] text-black">
+  return <div className="flex flex-1 flex-col gap-4 border-slate-500 border-1 p-8 rounded-lg w-[540px] text-black">
     <div className="font-semibold text-2xl grow flex flex-col items-start gap-4">
       <div className="flex flex-row gap-2 justify-between items-center w-[100%]">
         <div className="flex flex-row gap-2 items-center">
@@ -60,7 +60,8 @@ export const AvatarPromptItem = ({ item, file }: { item: Prompt, file: File | un
 
     <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
       <Button radius="full" onClick={tip} color={'primary'} className="w-[220px]">Tip</Button>
-      {showPrompt ? <p>{item.content}</p> : <p>Tip to show prompt</p>}
+      {showPrompt ? <p className={'text-2xl text-white pt-4'}>{item.content}</p> : null}
+      {showPrompt ? <p className={'text-md text-gray-400'}>user prompt</p> : <p className={'text-md text-gray-400'}>Tip to show prompt</p>}
     </div>
   </div>
 }
