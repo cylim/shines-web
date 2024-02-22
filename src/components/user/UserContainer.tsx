@@ -7,10 +7,10 @@ import { AvatarList } from '@/components/avatar/AvatarList';
 import { list as listDoc } from "@/utils/firebaseHelper";
 import { VideoList } from '@/components/video/VideoList';
 import { useQuery } from '@tanstack/react-query';
-import { Link, Spacer, User } from '@nextui-org/react';
-import NextLink from 'next/link'
+import { Spacer } from '@nextui-org/react';
 import { useAccount } from 'wagmi';
 import { Sidebar } from '../layouts/Sidebar';
+import { UserInfo } from './UserInfo';
 
 const sidebar = [
   { title: 'Avatars', url: 'avatars' },
@@ -72,17 +72,7 @@ export const UserContainer = () => {
   return (
     <div className="flex flex-row justify-between w-[100%] gap-4">
       <Sidebar items={sidebar} fallback={'home'}>
-        <User classNames={{ wrapper: 'w-[100%]', name: 'text-lg', base: 'mb-4 ' }} name={truncate(userAddress, 6)} description={(
-          <div className={'flex flex-row items-center gap-2'}>
-            <Link href={`https://mumbai.polygonscan.com/address/${userAddress}`} size="md" isExternal>
-              Explorer
-            </Link>
-            {isConnected && userAddress !== address && <span>|</span>}
-            {isConnected && userAddress !== address && <Link as={NextLink} href={`?to=${userAddress}`} size="md">
-              Chat
-            </Link>}
-          </div>
-        )} />
+        <UserInfo userAddress={userAddress} />
       </Sidebar>
       <div className='flex flex-col justify-start w-[100%] overflow-y-scroll max-h-screen'>
         {tab === undefined || tab === 'avatars' ? <>

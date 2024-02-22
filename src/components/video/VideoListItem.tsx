@@ -8,11 +8,16 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import { PINATA_JWT } from "@/utils/env";
+import { useEffect } from "react";
 
 export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: LensClient | undefined }) => {
   const { address } = useAccount()
+
   const share = async () => {
-    if (!lensClient) { return }
+    if (!lensClient || !(await lensClient?.authentication.isAuthenticated())) { 
+      toast('Lens unauthenticated')
+      return
+     }
 
     const metadata = {
       title: 'Great video!',
@@ -42,8 +47,6 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
         data: dataToUpload,
         headers: {
           Authorization: `Bearer ${PINATA_JWT}`,
-          // 'pinata_api_key': `${process.env.REACT_APP_PINATA_API_KEY}`,
-          // 'pinata_secret_api_key': `${process.env.REACT_APP_PINATA_API_SECRET}`,
           "Content-Type": "application/json"
         },
       });
@@ -70,7 +73,7 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
     }
   }
 
-  return <Link as={NextLink} href={`#videos/${item.id}`}>
+  return <Link as={NextLink} href={`#videos/${item.id}`} prefetch={false}>
     <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
       <div className="font-semibold text-2xl grow flex flex-row items-start">
         <video controls src={item.url} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />

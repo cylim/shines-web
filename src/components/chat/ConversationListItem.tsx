@@ -1,7 +1,8 @@
 import { DecodedMessage, Conversation } from '@xmtp/xmtp-js'
 import { truncate } from '@/utils/string'
 import { getConversationId } from '@/utils/xmtp'
-import { Button, Kbd, User } from '@nextui-org/react'
+import { Button, Kbd } from '@nextui-org/react'
+import { UserInfo } from '../user/UserInfo'
 
 type ConversationListItemProps = {
   conversation: Conversation
@@ -26,7 +27,7 @@ export const ConversationListItem = ({
       onClick={() => onClick(getConversationId(conversation))}
     >
       <div className={'flex flex-row justify-between items-center w-[100%]'}>
-        <User name={truncate(conversation.peerAddress, 4)} classNames={{ name: 'font-semibold' }} />
+        <UserInfo userAddress={conversation.peerAddress} short />
         <p className={'text-xs font-semibold'}>
           {latestMessage?.sent && new Date(latestMessage?.sent as Date).toDateString()}
         </p>

@@ -82,7 +82,7 @@ export default async function Home({
     <div className="p-4">
       frames.js starter kit. The Template Frame is on this page, it&apos;s in
       the html meta tags (inspect source).{" "}
-      <Link href={`/frames/debug?url=${HOST}/frames/${id}`} className="underline">
+      <Link href={`/frames/debug?url=${HOST}/frames/${id}`} className="underline" prefetch={false}>
         Debug
       </Link>
       <FrameContainer

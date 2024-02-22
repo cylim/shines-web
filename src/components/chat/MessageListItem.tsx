@@ -18,7 +18,7 @@ export const MessageListItem = ({ isSender, message, nextMessage }: MessageListI
   return (
     <div className={`flex flex-${isSender ? 'row-reverse' : 'row'} pb-${sameAuthor ? 1 : 2} items-end gap-1 ${isSender ? 'justify-end' : 'justify-start'}`}>
       {isSender || sameAuthor ? null : (
-        <Link href={`/users/${message.senderAddress as string}`} passHref style={{ cursor: 'pointer' }}>
+        <Link prefetch={false} href={`/users/${message.senderAddress as string}`} passHref style={{ cursor: 'pointer' }}>
           <Avatar name={message.senderAddress as string} size='md' />
         </Link>
       )}
