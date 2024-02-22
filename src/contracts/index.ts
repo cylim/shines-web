@@ -2,7 +2,7 @@ import {
   polygonMumbai
 } from 'viem/chains';
 
-import {takoOpenLensHub} from './abis/takoOpenLensHub'
+import takoOpenLensHub from './abis/takoOpenLensHub'
 
 export type SupportedNetworks = 'typeDef' | 'Polygon Mumbai'
 type SupportedContracts = 'takoOpenLensHub'

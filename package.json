@@ -36,9 +36,10 @@
     "scrolltrigger": "^1.0.1",
     "sharp": "^0.33.1",
     "swr": "^2.2.4",
+    "tako-open-curation": "^1.0.3",
     "usehooks-ts": "^2.9.1",
-    "viem": "2",
-    "wagmi": "2"
+    "viem": "^2.7.12",
+    "wagmi": "^2.5.7"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",
