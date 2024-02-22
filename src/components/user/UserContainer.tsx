@@ -87,7 +87,7 @@ export const UserContainer = () => {
           <h1 className='pt-12'>Posts</h1>
           <VideoList items={videos} loading={isLoadingVideos || isFetchingVideos} />
         </> : null}
-        <Spacer y={40} />
+        <Spacer y={72} />
       </div>
     </div>
   )
