@@ -107,7 +107,6 @@ export async function getAuthenticatedClient(walletClient: WalletClient) {
 
 export const useLens = () => {
   const { data: walletClient } = useWalletClient({ chainId: polygonMumbai.id })
-  // const { data: lens } = useSocial(address)
   const [client, setClient] = useState<LensClient | undefined>(undefined)
 
   const setup = useCallback(async () => {

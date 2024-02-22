@@ -1,6 +1,5 @@
 import { useQuery } from "@airstack/airstack-react";
 
-
 interface QueryResponse {
   data: Data | null;
   loading: boolean;
@@ -18,6 +17,9 @@ interface Error {
 interface Social {
   dappName: "lens" | "farcaster";
   profileTokenIdHex: string;
+  profileImage: string
+  profileDisplayName: string
+  profileHandle: string
 }
 
 interface Wallet {
@@ -31,6 +33,9 @@ query MyQuery {
     socials {
       dappName
       profileTokenIdHex
+      profileImage
+      profileDisplayName
+      profileHandle
     }
   }
 }
@@ -38,7 +43,7 @@ query MyQuery {
 
 
 export function useSocial(address: `0x${string}` | undefined) {
-  const { data, loading, error }: QueryResponse = useQuery<Data>(query.replace('$identity', address || ""), {}, { cache: false });
+  const { data, loading, error }: QueryResponse = useQuery<Data>(query.replace('$identity', address || ""), {}, { cache: true });
 
-  return { data: data?.Wallet.socials.find(s => s.dappName === 'lens'), loading, error }
+  return { data: data?.Wallet?.socials?.find(s => s.dappName === 'lens') || undefined, loading, error }
 }

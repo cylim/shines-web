@@ -47,3 +47,9 @@ export const isValidAddr = (address: string | undefined | null) => {
   const re = /^0x[a-fA-F0-9]{40}$/
   return address?.match(re) || false
 }
+// Replace IPFS address
+export const replaceIPFS = (url: string = '') => {
+  return url
+    .replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/') // case: ipfs://ipfs/xyz/image.png
+    .replace('ipfs://', 'https://ipfs.io/ipfs/') // case: ipfs://xyz/1.gif
+}
