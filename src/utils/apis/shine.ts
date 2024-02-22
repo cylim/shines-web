@@ -16,7 +16,7 @@ const handleMedia = (res: AxiosResponse) => {
 
 const handleVideo = (res: AxiosResponse) => {
   const blob = new Blob([res.data], { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() });
-  const file = new File([blob], 'uploaded_image.png', { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() || 'image/png' });
+  const file = new File([blob], 'uploaded_image.mp4', { type: (res?.headers?.['Content-Type'] as string)?.toLowerCase() || 'video/mp4' });
 
   return file
 }

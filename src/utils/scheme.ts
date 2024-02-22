@@ -19,6 +19,7 @@ export type Avatar = {
 export type Video = {
   address: string
   url: string
+  sourceUrl?: string
   type?: string
 } & DatabaseRow
 
@@ -47,3 +48,12 @@ export type Post = {
     asset: PublicationMetadataMediaVideoFragment
   }
 } 
+
+export type Feed = {
+  lensId: string,
+  bidId: string,
+  id: string,
+  address: string,
+  videoUrl: string,
+  message: string,
+}

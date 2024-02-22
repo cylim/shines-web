@@ -1,8 +1,7 @@
 
 'use client'
-import { Button, Link } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { Video } from "@/utils/scheme";
-import NextLink from 'next/link'
 import { LensClient, isRelaySuccess } from "@lens-protocol/client";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -15,22 +14,28 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
   const { address } = useAccount()
 
   const share = async () => {
-    if (!lensClient || !(await lensClient?.authentication.isAuthenticated())) { 
+    if (!lensClient || !(await lensClient?.authentication.isAuthenticated())) {
       toast('Lens unauthenticated')
       return
-     }
+    }
 
+    const result = prompt('Add title for the post')
+    if (!result) {
+      return
+    }
+    toast('Generating metadata')
     const metadata = shortVideo({
-       title: `AI short video of ${await lensClient.authentication.getProfileId()}`,
-       video: {
-         item: item.url,
-         type: MediaVideoMimeType.MP4,
-         cover: item.url,
-         duration: 60,
-         altTag: `AI short video of ${await lensClient.authentication.getProfileId()}`,
-         license: MetadataLicenseType.CCO,
-       }
-     })
+      title: result || `AI short video of ${await lensClient.authentication.getProfileId()}`,
+      video: {
+        item: item.sourceUrl ||  item.url,
+        type: MediaVideoMimeType.MP4,
+        cover: item.sourceUrl || item.url,
+        duration: 60,
+        altTag: `AI short video of ${await lensClient.authentication.getProfileId()}`,
+        license: MetadataLicenseType.CCO,
+      }
+    })
+
 
     const dataToUpload = JSON.stringify({
       pinataMetadata: {
@@ -42,6 +47,8 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
       pinataContent: metadata
     });
     try {
+      toast.dismiss()
+      toast('Uploading Metadata')
       const resFile = await axios({
         method: "post",
         url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
@@ -55,6 +62,8 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
       const ipfsUrl = `ipfs://${resFile.data.IpfsHash}`;
       console.log('IPFS metadata:', ipfsUrl)
 
+      toast.dismiss()
+      toast('Publishing to Lens')
       const result = await lensClient.publication.postOnchain({
         contentURI: ipfsUrl,
       });
@@ -67,24 +76,25 @@ export const VideoListItem = ({ item, lensClient }: { item: Video, lensClient: L
       }
 
       console.log(`Transaction was successfully broadcasted with txId ${resultValue.txId}`);
-      console.log(`Details:`, resultValue)
-      toast('posted')
+     
+      toast.dismiss()
+      toast.success('Posted')
     } catch (e) {
       console.log("Error uploading data ", e);
     }
   }
 
-  return  <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
-      <div className="font-semibold text-2xl grow flex flex-row items-start">
-        <video controls src={item.url} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />
-      </div>
-
-      <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
-        {
-          address === item.address
-            ? <Button radius="full" onClick={share} color={'primary'} className="w-[220px]">Share</Button>
-            : null
-        }      </div>
+  return <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
+    <div className="font-semibold text-2xl grow flex flex-row items-start">
+      <video controls src={item.sourceUrl || item.url} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />
     </div>
+
+    <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
+      {
+        address === item.address
+          ? <Button radius="full" onClick={share} color={'primary'} className="w-[220px]">Share</Button>
+          : null
+      }      </div>
+  </div>
 
 }
