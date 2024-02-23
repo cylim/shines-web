@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import { Container } from "./Container";
 import { AirstackProvider } from "@airstack/airstack-react";
+import redpandaImg from '@/assets/images/redpanda.jpg';
 
 const AuthProvider = dynamic(async () => (await import('@/components/auth/AuthProvider')).AuthProvider, { ssr: false })
 const XmtpProvider = dynamic(() => import('@/utils/XmtpContext'), {
@@ -18,7 +19,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     <AuthProvider>
       <XmtpProvider>
         <AirstackProvider apiKey={process.env.NEXT_PUBLIC_AIRSTACK_API_KEY ?? ""}>
-            <div className="background overflow-hidden max-h-screen">
+          <div className="background overflow-hidden max-h-screen bg-cover bg-center bg-[#00000090] bg-blend-hue" style={{ backgroundImage: `url(${redpandaImg.src})`}} >
               <Header />
               <div className="flex flex-col items-center justify-between w-[100%] overflow-hidden max-h-screen">
                 <Container>
