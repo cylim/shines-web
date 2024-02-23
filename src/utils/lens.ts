@@ -114,7 +114,9 @@ export const useLens = () => {
   const [client, setClient] = useState<LensClient | undefined>(undefined)
 
   const setup = useCallback(async () => {
-    if (!walletClient?.account.address) { return undefined }
+    console.log('Trying to setup lens')
+    if (!walletClient?.account?.address) { return setClient(undefined) }
+    console.log('getAuthenticatedClient')
     const c = await getAuthenticatedClient(walletClient)
     setClient(c)
 

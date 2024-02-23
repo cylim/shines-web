@@ -14,8 +14,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const abiData = await generateBidAbiData(body.data)
-    // const trx = await generateTrx(body.data)
     console.log(abiData)
+    
+    // const trx = await generateTrx(body.data)
+    // console.log(trx)
 
     return NextResponse.json({abiData})
   } catch(err: any) {

@@ -2,6 +2,7 @@ import keccak from 'keccak'
 
 
 export const truncate = (addr: string, count = 4): string => `${addr.substring(0, count + 2)}...${addr.substring(addr.length - count)}`
+export const truncateEnd = (addr: string, count = 4): string => `${addr.substring(0, addr.length > count? count: addr.length - 1)}...`
 
 
 export const stripHexPrefix = (value: string): string => {

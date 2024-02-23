@@ -56,4 +56,6 @@ export type Feed = {
   address: string,
   videoUrl: string,
   message: string,
+  amount: string,
+  txHash: string
 }

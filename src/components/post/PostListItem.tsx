@@ -4,77 +4,105 @@ import { Button } from "@nextui-org/react";
 import { Post } from "@/utils/scheme";
 import { LensClient } from "@lens-protocol/client";
 import toast from "react-hot-toast";
-import { useAccount, usePublicClient, useWriteContract } from "wagmi";
+import { useAccount, usePublicClient, useSendTransaction, useWaitForTransactionReceipt, } from "wagmi";
 import { useParams } from "next/navigation";
 import { insertRow } from "@/utils/firebaseHelper";
 import axios from "axios";
 import Contracts from "@/contracts";
 import { parseEther } from "viem";
+import { useCallback, useEffect, useState } from "react";
+import { truncate } from "@/utils/string";
+import { decodeAbiParameters, parseAbiParameters, decodeEventLog } from 'viem'
 
 export const PostListItem = ({ item, lensClient }: { item: Post, lensClient: LensClient | undefined }) => {
+  const [txHash, setTxHash] = useState<`0x${string}`| undefined>(undefined)
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
-  const publicClient = usePublicClient()
+  const { sendTransactionAsync } = useSendTransaction()
+  const trxResult = useWaitForTransactionReceipt({ 
+    hash: txHash
+  })
   const params = useParams()
+  const [loading, setLoading] = useState(false)
 
   const isOwner = params.address === address
 
-  const add = async () => {
-    if (!publicClient) { return }
-    const bidAmount = prompt("Enter bid amount (Matic). e.g. 0.1") || "unknown"
-    if (!(+bidAmount)) {
-      return
+  const saveToDb = useCallback(async() => {
+    try{
+      if (!txHash || !trxResult.data) { throw new Error('No data')}
+      setLoading(true)
+      const topic = "0xb3dbdb6cbc7bd86a1b745e6249d13414fcf1075914d9c9bec160aefc4ac4ac1a"
+      const data = trxResult.data.logs?.[1].data || '0x'
+
+      const res = decodeEventLog({
+        data: data as `0x${string}`,
+        topics: [topic],
+        abi: Contracts['Polygon Mumbai'].takoOpenLensHub.abi,
+        eventName: 'addBidEvent'
+      })
+
+      const { bidAmount = 0 } = res.args?.content || {}
+      toast('Adding Bid into post')
+      const key = `${address}-${+new Date()}`
+      const bidId = res.args?.index.toString()
+      await insertRow("posts", [key], {
+        lensId: item.id,
+        bidId: bidId,
+        id: key,
+        address: address,
+        videoUrl: item.metadata.asset.video.raw.uri,
+        message: item.metadata.title,
+        amount: bidAmount?.toString(),
+        txHash: txHash
+      })
+      toast.dismiss()
+      toast('completed')
+    } catch (err: any) {
+      toast.dismiss()
+      toast.error(err.message)
+    } finally {
+      setLoading(false)
     }
+  }, [txHash, trxResult.data, trxResult.error])
+
+  useEffect(() => {
+    if (!trxResult.data && !trxResult.error) return
+    console.log(trxResult.data)
+    console.log(trxResult.error)
+    saveToDb()
+  }, [trxResult.data, trxResult.error])
+
+  const add = async () => {
     try {
-    // const bids = await axios.get('/tako/bids')
-    // console.log(bids)
-    const res = await axios.post('/tako/bids', {
-      data: {
-        contentId: item.id,
-        bidAmount: bidAmount,
-        from: address
-      }
-    })
-    if (!!res.data?.abiData) {
+      const bidAmount = prompt("Enter bid amount (Matic). e.g. 0.1") || "unknown"
+      if (!(+bidAmount)) { throw new Error('Bid Amount malformatted') }
+
+      setLoading(true)
+      const res = await axios.post('/tako/bids', {
+        data: {
+          contentId: item.id,
+          bidAmount: bidAmount,
+          from: address
+        }
+      })
+      if (!res.data?.abiData) { throw new Error('Unable to get encodedFuncationData') }
       const contract = Contracts['Polygon Mumbai'].takoOpenLensHub;
       const ethValue = parseEther(bidAmount)
-      const funcConfig = {
+
+      const txHash = await sendTransactionAsync({
         account: address as `0x${string}`,
-        address: contract.address,
-        abi: contract.abi,
-        functionName: 'bid',
-        args: [res.data?.abiData, 0, '0x'],
-      }
-
-      console.log(ethValue)
-
-      const tx = await writeContractAsync({
-        ...funcConfig, 
-        // @ts-expect-error
+        to: contract.address,
+        data: res.data?.abiData,
         value: ethValue
       })
-      console.log(tx)
-
-      // const { hash } = await walletClient.writeContract(request)
-      // return { trx, status: 'success' }
-    }
-
-    toast('Adding Bid')
-    // const key = `${address}-${+new Date()}`
-    // const bidId = ""
-    // await insertRow("posts", [key], {
-    //   lensId: item.id,
-    //   bidId: bidId,
-    //   id: key,
-    //   address: address,
-    //   videoUrl: item.metadata.asset.video.raw.uri,
-    //   message: item.metadata.title,
-    //   amount: bidAmount
-    // })
-    toast('completed')
+      console.log(txHash)
+      toast(`Trx submitted: ${truncate(txHash, 6)}`)
+      setTxHash(txHash)
+      toast('Waiting for transaction results....')
     } catch (err: any) {
-      console.log(err.message)
-    }
+      setLoading(false)
+      toast.error(err.message)
+      console.warn(err.message)
+    } 
   }
 
   return <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl max-w-[256px]">
@@ -87,7 +115,7 @@ export const PostListItem = ({ item, lensClient }: { item: Post, lensClient: Len
 
 
     {isOwner && <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
-      <Button radius="full" onClick={add} color={'primary'} className="w-[220px]">Add Bid</Button>
+      <Button radius="full" onClick={add} color={'primary'} className="w-[220px]" isLoading={loading}>Add Bid</Button>
     </div>}
   </div>
 }

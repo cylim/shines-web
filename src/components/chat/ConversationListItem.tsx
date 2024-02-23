@@ -1,5 +1,5 @@
 import { DecodedMessage, Conversation } from '@xmtp/xmtp-js'
-import { truncate } from '@/utils/string'
+import { truncateEnd } from '@/utils/string'
 import { getConversationId } from '@/utils/xmtp'
 import { Button, Kbd } from '@nextui-org/react'
 import { UserInfo } from '../user/UserInfo'
@@ -42,7 +42,7 @@ export const ConversationListItem = ({
           </Kbd>
         )}
         <p className="text-sm text-left">
-          {latestMessage?.content ? truncate(latestMessage.content, 16) : 'No latest messages'}
+          {latestMessage?.content ? truncateEnd(latestMessage.content, 16) : 'No latest messages'}
         </p>
       </div>
     </Button>

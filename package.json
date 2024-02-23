@@ -17,6 +17,7 @@
     "@noble/ed25519": "^2.0.0",
     "@rainbow-me/rainbowkit": "2",
     "@tanstack/react-query": "^5.17.19",
+    "@wagmi/core": "^2.6.5",
     "@xmtp/react-sdk": "^5.0.2",
     "@xmtp/xmtp-js": "^11.3.10",
     "axios": "^1.6.7",

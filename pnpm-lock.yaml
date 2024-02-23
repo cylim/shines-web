@@ -31,6 +31,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^5.17.19
     version: 5.20.5(react@18.2.0)
+  '@wagmi/core':
+    specifier: ^2.6.5
+    version: 2.6.5(@types/react@18.2.45)(react@18.2.0)(typescript@5.3.3)(viem@2.7.12)(zod@3.22.4)
   '@xmtp/react-sdk':
     specifier: ^5.0.2
     version: 5.0.2(@types/react@18.2.45)(@xmtp/xmtp-js@11.3.10)(karma@6.4.2)(react@18.2.0)(typescript@5.3.3)

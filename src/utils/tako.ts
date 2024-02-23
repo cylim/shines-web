@@ -17,7 +17,7 @@ export const generateClaimRewardAbiData = async({profileId, bidIndex, contentId}
   return abiData
 }
 
-// After the curators complete the curation(i.e., quote the target publication on Lens), 
+// After the cureators complete the curation(i.e., quote the target publication on Lens), 
 // they must bind the Quoted Publication Id and Bid Index.
 // So that Tako can verify that the curators have completed the curation task.
 export const registerBid = async ({bidIndex, contentId} : any) => {
@@ -27,7 +27,9 @@ export const registerBid = async ({bidIndex, contentId} : any) => {
 
 // Generate calldata to call the Tako Open Curation Contract
 export const generateBidAbiData = async ({contentId, bidToken =  '0x0000000000000000000000000000000000000000', bidAmount}: any) => {
+  console.log(bidAmount)
   const amount = parseEther(bidAmount); 
+  console.log(amount)
   const abiData = await lensOpenCuration.generateBidAbiData(contentId, bidToken, amount);
 
   return abiData
@@ -36,8 +38,9 @@ export const generateBidAbiData = async ({contentId, bidToken =  '0x000000000000
 // Generate transaction parameter to call the Tako Open Curation Contract
 export const generateTrx = async({contentId, bidToken, bidAmount, from}: any) => {
   const takoHubInfo = await lensOpenCuration.takoHubInfo();
-  const amount = parseEther(bidAmount); 
+  console.log(takoHubInfo)
   const abiData = await generateBidAbiData({contentId, bidToken, bidAmount}) 
+  const amount = parseEther(bidAmount); 
   const estimatedGas = await lensOpenCuration.estimateGas(from, takoHubInfo.contract, abiData, amount);
   const transaction = await lensOpenCuration.generateTransaction(from, abiData, amount, estimatedGas * BigInt(3));
   console.log(transaction)

@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Footer from "./Footer";
 import Header from "./Header";
 import { Container } from "./Container";
-import { init, AirstackProvider } from "@airstack/airstack-react";
+import { AirstackProvider } from "@airstack/airstack-react";
 
 const AuthProvider = dynamic(async () => (await import('@/components/auth/AuthProvider')).AuthProvider, { ssr: false })
 const XmtpProvider = dynamic(() => import('@/utils/XmtpContext'), {

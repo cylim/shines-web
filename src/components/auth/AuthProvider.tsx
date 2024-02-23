@@ -15,7 +15,7 @@ import {
 } from "@tanstack/react-query";
 import { APP_NAME, WALLETCONNECT_KEY } from '@/utils/env';
 
-const config = getDefaultConfig({
+export const config = getDefaultConfig({
   appName: APP_NAME,
   projectId: WALLETCONNECT_KEY,
   chains: [polygonMumbai],
