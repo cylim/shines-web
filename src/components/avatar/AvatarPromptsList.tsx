@@ -16,7 +16,7 @@ export const AvatarPromptsList = () => {
   const [avatar, setAvatar] = useState<Avatar | undefined>(undefined);
 
   const getOne = useCallback(async () => {
-    if (!params?.id) {return}
+    if (!params?.id) { return }
 
     const ava = await get('avatars', [params?.id as string]) as Avatar
     fetch(ava.sourceUrl)
@@ -49,19 +49,17 @@ export const AvatarPromptsList = () => {
   }
 
   return (
-    <div className="w-full mx-auto mt-8 flex flex-col items-center overflow-y-scroll py-3">
-        {!items.length ? <EmptyComponent /> : 
-        <div className={'flex flex-col gap-4 w-[100%] mx-4 items-center justify-center'}>
-          <div className={'text-black'}>
-            <Image src={avatar?.sourceUrl} height={320} width={320} />
-            <p className="text-center pt-4 text-xl text-gray-500">requests</p>
-            <p className="text-center pt-2 text-4xl">{avatar?.description}</p>
-          </div>
-          {items.map(renderAvatarItem)}
+    <div className="w-full mx-auto mt-8 flex flex-col items-centeroverflow-y-scroll py-3">
+      <div className={'flex flex-col gap-4 w-[100%] mx-4 items-center justify-center'}>
+        <div className={'flex flex-col w-[100%] mx-4 items-center'}>
+          <Image src={avatar?.sourceUrl} height={320} width={320} />
+          <p className="text-center pt-4 text-xl text-gray-500">requests</p>
+          <p className="text-center pt-2 text-3xl">{avatar?.description}</p>
         </div>
+        {!items.length ? <EmptyComponent text={'No prompts submitted'} overrideStyle={'mt-10'} /> :
+          items.map(renderAvatarItem)
         }
-        
-
+      </div>
     </div>
   );
 };
