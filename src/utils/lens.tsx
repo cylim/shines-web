@@ -20,6 +20,7 @@ class LocalStorageProvider implements IStorageProvider {
 }
 
 export async function getAuthenticatedClient(walletClient: WalletClient) {
+  console.log('init lens')
   const lensClient = new LensClient({
     environment: development,
     storage: new LocalStorageProvider()
@@ -28,12 +29,15 @@ export async function getAuthenticatedClient(walletClient: WalletClient) {
   const address = walletClient.account?.address;
 
   if(!address) { return undefined }
-  
+  console.log('retrieve user address')
+
   let selected = undefined
   do {
+    console.log('retrieve user lens profile')
     const profiles = await lensClient.profile.fetchAll({ where: { ownedBy: [address] } })
-    selected = profiles.items?.[0].id
+    selected = profiles.items?.[0]?.id || undefined
     if(!selected) {
+      console.log('generating user lens profile')
       await lensClient.wallet.createProfile({ to: address })
     }
   } while(!selected)
@@ -117,8 +121,7 @@ export const useLens = () => {
   }, [walletClient?.account.address])
 
   useEffect(() => {
-    if (walletClient?.account.address)
-    setup()
+    if (walletClient?.account.address) setup()
   }, [walletClient])
   
   return client
