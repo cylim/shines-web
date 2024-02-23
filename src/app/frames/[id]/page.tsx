@@ -63,10 +63,10 @@ export default async function Home({
       requesterVerifiedAddresses,
       requesterUserData,
     } = frameMessage;
-    
+
     if (state.active && isValid && buttonIndex === 1 && !!inputText) {
       const key = `${requesterVerifiedAddresses?.[0] || 'undefined'}-${+new Date()}`
-      await insertRow('prompts', [key], {
+      insertRow('prompts', [key], {
         id: key,
         content: inputText,
         address: requesterVerifiedAddresses?.[0],

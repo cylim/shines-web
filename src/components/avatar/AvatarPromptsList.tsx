@@ -6,7 +6,6 @@ import { AvatarPromptItem } from "./AvatarPromptItem";
 import { EmptyComponent } from "../EmptyComponent";
 import { useParams } from "next/navigation";
 import { get, list as listDoc } from "@/utils/firebaseHelper";
-import Box from "../layouts/Box";
 import { Image } from "@nextui-org/react";
 
 export const AvatarPromptsList = () => {
@@ -49,7 +48,7 @@ export const AvatarPromptsList = () => {
   }
 
   return (
-    <div className="w-full mx-auto mt-8 flex flex-col items-centeroverflow-y-scroll py-3">
+    <div className="w-full mx-auto mt-8 flex flex-col items-center py-3  overflow-y-scroll overflow-x-hidden ">
       <div className={'flex flex-col gap-4 w-[100%] mx-4 items-center justify-center'}>
         <div className={'flex flex-col w-[100%] mx-4 items-center'}>
           <Image src={avatar?.sourceUrl} height={320} width={320} />
@@ -57,7 +56,9 @@ export const AvatarPromptsList = () => {
           <p className="text-center pt-2 text-3xl">{avatar?.description}</p>
         </div>
         {!items.length ? <EmptyComponent text={'No prompts submitted'} overrideStyle={'mt-10'} /> :
-          items.map(renderAvatarItem)
+          <div className="flex flex-row flex-wrap gap-4 justify-center overflow-x-hidden">
+          {items.map(renderAvatarItem)}
+        </div>
         }
       </div>
     </div>
