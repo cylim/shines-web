@@ -1,14 +1,16 @@
 'use client'
-import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Textarea } from "@nextui-org/react"
+import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from "@nextui-org/react"
 import React, { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
 import { insertRow, upload } from "@/utils/firebaseHelper";
 import { useDropzone } from 'react-dropzone';
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export const CreateModal = () => {
   const params = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const [opened, setOpen] = useState(!!params.get('avatar'))
   const [file, setFile] = useState<File | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -73,10 +75,10 @@ export const CreateModal = () => {
       setTimeout(() => {
         toast.dismiss()
         toast.success(`Created`)
-        setOpen(false);
+        router.replace(pathname)
 
         reload();
-      }, 1000)
+      }, 2000)
     } catch (err: any) {
       toast.dismiss()
       toast.error(err.message)
@@ -98,7 +100,7 @@ export const CreateModal = () => {
         Add Avatar
       </Button>
     </div>
-    <Modal isOpen={opened} onOpenChange={setOpen} scrollBehavior={'outside'} backdrop={'blur'} onClose={() => setOpen(false)} hideCloseButton classNames={{
+    <Modal isOpen={opened} onOpenChange={setOpen} scrollBehavior={'outside'} backdrop={'blur'} onClose={() => router.replace(pathname)} hideCloseButton classNames={{
       backdrop: "bg-gradient-to-t from-zinc-950 to-zinc-950/10 backdrop-opacity-100 brightness-50 backdrop-blur-md",
       base: "bg-transparent max-w-lg shadow-none",
     }}>
@@ -120,7 +122,7 @@ export const CreateModal = () => {
             <Button radius="full" onClick={add} isLoading={loading} color="primary" className="primary-button">
               {loading ? 'Generating' : 'Upload & Create'}
             </Button>
-            <Button radius="full" onClick={() => setOpen(false)} className="primary-button bg-none !animate-none !transition-none !bg-[#272727] !mt-4">Cancel</Button>
+            <Button radius="full" onClick={() => router.replace(pathname)} className="primary-button bg-none !animate-none !transition-none !bg-[#272727] !mt-4">Cancel</Button>
           </div>
         </ModalBody>
         <ModalFooter className="flex flex-col text-center w-full">
