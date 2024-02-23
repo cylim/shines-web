@@ -9,9 +9,12 @@ const takoReq = (payload: any) => {
 }
 
 export const TakoAPI = {
-  registerBid: ({cententId, bidId}: any) => takoReq({
-    data: {index: bidId, pubId:cententId},
+  registerBid: ({contentId, bidId}: any) => takoReq({
+    data: {index: bidId, pubId:contentId},
     method: "POST",
-    endpoint: `v2/lens/open-curation/register`,
+    endpoint: `v2/lens/open_curation/register`,
+    headers: {
+      'Accept': 'application/json'
+    }
   }),
 }
