@@ -113,7 +113,6 @@ export const PostListItem = ({ item, lensClient }: { item: Post, lensClient: Len
       <video controls src={item.metadata.asset.video.raw.uri} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />
     </div>
 
-
     {isOwner && <div className={'flex flex-col flex-wrap justify-center gap-2 items-center'}>
       <Button radius="full" onClick={add} color={'primary'} className="w-[220px]" isLoading={loading}>Add Bid</Button>
     </div>}

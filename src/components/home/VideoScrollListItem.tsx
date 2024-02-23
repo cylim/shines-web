@@ -2,15 +2,70 @@ import { random } from "@/utils/random";
 import { Feed } from "@/utils/scheme";
 import { UserInfo } from "../user/UserInfo";
 import { formatEther } from "viem";
-import { LensClient } from "@lens-protocol/client";
+import { LensClient, isRelaySuccess } from "@lens-protocol/client";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { PINATA_JWT } from "@/utils/env";
+import { textOnly } from "@lens-protocol/metadata";
 
 export const VideoScrollListItem = ({ item, index, lensClient }: { item: Feed, index: number, lensClient: LensClient | undefined }) => {
   
   const handleQuote = async () => {
-    // await lensClient.publication.quoteOnchain({
-    //   quoteOn: item.lensId,
-    //   contentURI: metadata
-    // })
+    if (!lensClient || !(await lensClient?.authentication.isAuthenticated())) {
+      toast('Lens unauthenticated')
+      return
+    }
+
+    const content = prompt('Add quote message for the post')
+    if (!content) {
+      return
+    }
+    toast('Generating metadata')
+    const metadata = textOnly({
+      content: content
+    })
+
+    const dataToUpload = JSON.stringify({
+      pinataMetadata: {
+        name: item.id,
+        keyvalues: {
+          owner: item.address
+        }
+      },
+      pinataContent: metadata
+    });
+    toast('Uploading Metadata')
+    const resFile = await axios({
+      method: "post",
+      url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+      data: dataToUpload,
+      headers: {
+        Authorization: `Bearer ${PINATA_JWT}`,
+        "Content-Type": "application/json"
+      },
+    });
+
+    const ipfsUrl = `ipfs://${resFile.data.IpfsHash}`;
+    console.log('IPFS metadata:', ipfsUrl)
+
+    toast.dismiss()
+    toast('Publishing to Lens')
+    const result = await lensClient.publication.quoteOnchain({
+      quoteOn: item.lensId,
+      contentURI: ipfsUrl
+    })
+    const resultValue = result.unwrap();
+    if (!isRelaySuccess(resultValue)) {
+      toast('posted failed')
+      console.warn(`Something went wrong`, resultValue);
+      return;
+    }
+
+    console.log(`Transaction was successfully broadcasted with txId ${resultValue.txId}`);
+
+    toast.dismiss()
+    toast.success('Posted')
+
   }
   
   return(
@@ -30,10 +85,10 @@ export const VideoScrollListItem = ({ item, index, lensClient }: { item: Feed, i
       <a className={'text-sm text-black'} target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.txHash}`}>Verifiable via Polygonscan</a>
     </div>
 
-    <div className="flex flex-row text-2xl gap-4 w-[540px] pt-2">
+      <div className="flex flex-row text-2xl gap-4 w-[540px] pt-2 cursor-pointer" onClick={handleQuote}>
       <p className={'text-2xl'}>💕 {random(10000)}</p>
       <p className={'text-2xl'}>💬 {random()}</p>
-      <p className={'text-2xl cursor-pointer'} onClick={handleQuote}>🔗 {random(30)}</p>
+      <p className={'text-2xl '} >🔗 {random(30)}</p>
     </div>
 
   </section>
