@@ -32,10 +32,6 @@ export default async function Home({
   searchParams,
 }: NextServerPageProps) {
   const previousFrame = getPreviousFrame<State>(searchParams);
-  const frameMessage = await getFrameMessage(previousFrame.postBody, {
-    ...DEBUG_HUB_OPTIONS,
-  });
-
   const [state, dispatch] = useFramesReducer<State>(
     reducer,
     initialState,
@@ -48,7 +44,11 @@ export default async function Home({
   // console.log(item)
 
   // console.log("info: state is:", state);
-  if (frameMessage) {
+  if (previousFrame.postBody) {
+    const frameMessage = await getFrameMessage(previousFrame.postBody, {
+      ...DEBUG_HUB_OPTIONS,
+    });
+    if(!frameMessage) { return }
     // console.log("info: frameMessage is:", frameMessage);
     const {
       isValid,
@@ -63,6 +63,7 @@ export default async function Home({
       requesterVerifiedAddresses,
       requesterUserData,
     } = frameMessage;
+    
     if (state.active && isValid && buttonIndex === 1 && !!inputText) {
       const key = `${requesterVerifiedAddresses?.[0] || 'undefined'}-${+new Date()}`
       await insertRow('prompts', [key], {
@@ -92,11 +93,11 @@ export default async function Home({
         previousFrame={previousFrame}
       >
         {/* @ts-ignore */}
-        <FrameImage aspectRatio="1:1" options={{height: 480,width:480}}>
-          <div tw={`h-[480px] w-[480px] flex flex-col items-end justify-end bg-black bg-cover bg-center`} 
-            style={{ backgroundImage: `url('${item?.sourceUrl || 'https://wrbih-aiaaa-aaaal-adofa-cai.icp0.io/resources/0x950911F03616a05d5A1F96E76F783fAdeb53778c-1707986926701-avatar.png'}')`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
+        <FrameImage options={{height: 320,width:320}}>
+          <div tw={`max-h-[320px] max-w-[320px] h-[320px] w-full flex flex-col items-end justify-end bg-black bg-top`} 
           >
-            <div tw="bg-white w-full color-black px-4 py-2 text-xl" >
+            <img src={item?.sourceUrl || ''} className="max-h-[320px] max-w-[320px] h-auto w-[320px]" />
+            <div tw="bg-white w-full text-black px-2 py-1 text-sm" >
               {!state?.active ? item?.description || 'Help me to generate new prompt! Tips might given to the best prompt!' : 'Thanks for submitting the prompt!'}
             </div>
           </div>
