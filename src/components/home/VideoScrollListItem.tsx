@@ -4,7 +4,7 @@ import { UserInfo } from "../user/UserInfo";
 import { formatEther } from "viem";
 import { LensClient } from "@lens-protocol/client";
 
-export const VideoScrollListItem = ({ item, index, lensClient }: { item: Feed, index: number, lensClient: LensClient }) => {
+export const VideoScrollListItem = ({ item, index, lensClient }: { item: Feed, index: number, lensClient: LensClient | undefined }) => {
   
   const handleQuote = async () => {
     // await lensClient.publication.quoteOnchain({
@@ -27,7 +27,7 @@ export const VideoScrollListItem = ({ item, index, lensClient }: { item: Feed, i
     
     <div className="flex flex-col w-[540px] pt-2 rounded-lg bg-gray-400 px-4 py-2 ">
       <p className={'text-xl text-black'}>ID: {item.bidId}, Prize: {formatEther(BigInt(item.amount)).toString()} MATIC</p>
-      <a className={'text-sm text-black'} target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.txHash}`}>Verifiedable via Polygonscan</a>
+      <a className={'text-sm text-black'} target="_blank" href={`https://mumbai.polygonscan.com/tx/${item.txHash}`}>Verifiable via Polygonscan</a>
     </div>
 
     <div className="flex flex-row text-2xl gap-4 w-[540px] pt-2">
