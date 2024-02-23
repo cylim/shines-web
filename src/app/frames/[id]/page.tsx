@@ -93,7 +93,7 @@ export default async function Home({
         previousFrame={previousFrame}
       >
         {/* @ts-ignore */}
-        <FrameImage options={{height: 320,width:320}}>
+        <FrameImage aspectRatio="1:1" options={{height: 320,width:320}}>
           <div tw={`max-h-[320px] max-w-[320px] h-[320px] w-full flex flex-col items-end justify-end bg-black bg-top`} 
           >
             <img src={item?.sourceUrl || ''} className="max-h-[320px] max-w-[320px] h-auto w-[320px]" />
