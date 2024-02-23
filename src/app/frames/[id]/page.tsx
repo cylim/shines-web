@@ -97,7 +97,7 @@ export default async function Home({
           <div tw={`max-h-[320px] max-w-[320px] h-[320px] w-full flex flex-col items-end justify-end bg-black bg-top`} 
           >
             <img src={item?.sourceUrl || ''} className="max-h-[320px] max-w-[320px] h-auto w-[320px]" />
-            <div tw="bg-white w-full text-black px-2 py-1 text-sm" >
+            <div tw="bg-white w-full text-black px-2 py-1 text-sm absolute bottom-0" >
               {!state?.active ? item?.description || 'Help me to generate new prompt! Tips might given to the best prompt!' : 'Thanks for submitting the prompt!'}
             </div>
           </div>
