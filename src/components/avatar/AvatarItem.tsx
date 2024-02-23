@@ -28,7 +28,7 @@ export const AvatarItem = ({ item }: { item: Avatar}) => {
     router.push(`create?avatar_id=${item.id}`)
   }
 
-  return <Link as={NextLink} href={`/avatars/${item.id}`} prefetch={false}>
+  return <Link as={NextLink} href={`/avatars/${item.id}`} prefetch={true}>
     <div className="flex flex-col gap-2 border-slate-500 border-1 p-2 rounded-xl">
       <div className="font-semibold text-2xl grow flex flex-row items-start">
         <Image src={item.sourceUrl} height={240} width={240} className={'max-h-[240px] max-w-[240px] min-h-[240px] min-w-[240px]'} />

@@ -50,7 +50,7 @@ export const Header = async () => {
 
   return <header className={'pb-2 flex flex-col gap-2 px-2 lg:px-4'}>
     <div className={'flex flex-row items-center justify-between w-full'}>
-      <Link as={NextLink} href={'/'} prefetch={false}>
+      <Link as={NextLink} href={'/'} prefetch={true}>
         <Image
           src="/shine.png"
           alt="Shine Logo"
